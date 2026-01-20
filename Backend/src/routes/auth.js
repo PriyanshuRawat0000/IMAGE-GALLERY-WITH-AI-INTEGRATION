@@ -1,16 +1,9 @@
-const express =require('express');
+const express = require('express');
 const router = express.Router();
+const { login, signup, update } = require('../controllers/auth.js');
 
+router.get('/login', login);
+router.post('/signup', signup);
+router.put('/update', update);
 
-router.post('/login',(req,res)=>{
-    res.send('login');
-})
-
-router.post('/register',(req,res)=>{
-    res.send('register');
-})
-
-router.put('/update',(req,res)=>{
-    res.send('update user');
-})
-module.exports=router;
+module.exports = router;

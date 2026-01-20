@@ -1,17 +1,17 @@
 
 
-const { HfInference } = require("../../../Frontend/vite-project/node_modules/@huggingface/inference/dist/commonjs");
+const { HfInference } = require("@huggingface/inference");
 const cloudinary = require("../config/cloudinary");
 const Image = require("../models/image");
 
 const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
 
 const PROMPTS = [
-  "A futuristic cyberpunk city at night",
-  "A majestic dragon flying over mountains",
+  "anime scenery ",
+  "re zero anime style",
   "A peaceful village in anime style",
   "A anime girl with blue hair and a sword",
-  "A fantasy castle in clouds"
+  "Doraemon friends "
 ];
 
 const dailyImageGenerator = async () => {
@@ -20,7 +20,10 @@ const dailyImageGenerator = async () => {
       PROMPTS[Math.floor(Math.random() * PROMPTS.length)];
 
     const image = await hf.textToImage({
-      model: "stabilityai/stable-diffusion-xl-base-1.0",
+      //"black-forest-labs/FLUX.1-dev",
+      //"stabilityai/stable-diffusion-xl-base-1.0"
+      model:"stabilityai/stable-diffusion-xl-base-1.0",
+
       inputs: randomPrompt
     });
 

@@ -1,8 +1,10 @@
-import cloudinary from "../config/cloudinary.js";
-import Image from "../models/image.js";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+const { HfInference } = require("../../../Frontend/vite-project/node_modules/@huggingface/inference/dist/commonjs");
+const cloudinary = require("../config/cloudinary");
+const Image = require("../models/image");
+
+const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
 
 const PROMPTS = [
   "A futuristic cyberpunk city at night",
@@ -12,15 +14,17 @@ const PROMPTS = [
   "A fantasy castle in clouds"
 ];
 
-export const dailyImageGenerator = async () => {
+const dailyImageGenerator = async () => {
   try {
-    const randomPrompt = PROMPTS[Math.floor(Math.random() * PROMPTS.length)];
+    const randomPrompt =
+      PROMPTS[Math.floor(Math.random() * PROMPTS.length)];
 
-    const model = genAI.getGenerativeModel({ model: "imagen-3.0" });
-    const result = await model.generateContent(randomPrompt);
+    const image = await hf.textToImage({
+      model: "stabilityai/stable-diffusion-xl-base-1.0",
+      inputs: randomPrompt
+    });
 
-    const base64Image =
-      result.response.candidates[0].content.parts[0].inlineData.data;
+    const base64Image = Buffer.from(await image.arrayBuffer()).toString("base64");
 
     const uploadRes = await cloudinary.uploader.upload(
       `data:image/png;base64,${base64Image}`,
@@ -28,9 +32,9 @@ export const dailyImageGenerator = async () => {
     );
 
     await Image.create({
-      
-      imageUrl: uploadRes.secure_url,
-      cloudinaryId: uploadRes.public_id
+      cloudinaryId: uploadRes.public_id,
+      url: uploadRes.secure_url,
+      title: randomPrompt
     });
 
     console.log(" Daily image generated");
@@ -40,11 +44,17 @@ export const dailyImageGenerator = async () => {
   }
 };
 
-export const getAllImages = async (req, res) => {
+
+const getAllImages = async (req, res) => {
   try {
     const images = await Image.find().sort({ createdAt: -1 });
     res.json(images);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+};
+
+module.exports = {
+  dailyImageGenerator,
+  getAllImages
 };

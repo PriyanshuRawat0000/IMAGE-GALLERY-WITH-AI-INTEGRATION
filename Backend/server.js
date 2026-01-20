@@ -19,10 +19,11 @@ connectDB();
 
 app.listen(PORT, () => {
   console.log(`SERVER IS RUNNING ON PORT ${PORT}`);
-  (async () => {
-    console.log("Testing daily image generator...");
-    await dailyImageGenerator();
-  })();
+  // testing functionality
+  // (async () => {
+  //   console.log("Testing daily image generator...");
+  //   await dailyImageGenerator();
+  // })();
 })
 
 

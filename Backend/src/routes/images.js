@@ -5,4 +5,4 @@ const {getAllImages} = require("../controllers/imagegenerator.js");
 
 const router = express.Router();
 
-router.get("/dashboard", getAllImages);
+router.get("/images", getAllImages);

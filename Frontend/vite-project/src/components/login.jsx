@@ -1,12 +1,13 @@
 import React from 'react'
+import './login.css'
 
 const Login = () => {
   return (
-    <div>
+    <div className="login-container">
       <h1>Welcome Back</h1>
       <h3>Login to your Account</h3>
       <form className='loginForm'>
-        
+
         <label htmlFor='email'>Email</label>
         <br />
         <input type='email' id='email' name='email' placeholder='Enter your email' required />

@@ -1,12 +1,13 @@
 import React from 'react'
+import './signin.css'
 
 const SignUp = () => {
   return (
-    <div>
+    <div className="signin-container">
       <h1>Create an Account</h1>
       <h3>Sign up to get started</h3>
       <form className='signinForm'>
-       
+
         <label name='username'>Username</label>
         <br />
         <input type='text' name='username' placeholder='Enter your username' required />

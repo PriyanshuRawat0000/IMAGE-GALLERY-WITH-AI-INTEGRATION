@@ -1,0 +1,104 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Page background */
+.landing {
+  min-height: 100vh;
+  width:100vw;
+  background: linear-gradient(135deg, #0f172a, #1e293b, #020617);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  padding: 20px;
+}
+
+/* Content card */
+.landing > div {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 50px 60px;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Heading */
+.landing h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+}
+
+/* Subtitle */
+.landing h2 {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #cbd5f5;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+/* Button container */
+.landing > div > div {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Buttons */
+.landing button {
+  padding: 12px 30px;
+  border-radius: 30px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: white;
+  background: linear-gradient(45deg, #6366f1, #3b82f6);
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* Hover */
+.landing button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(99, 102, 241, 0.6);
+}
+
+/* Click */
+.landing button:active {
+  transform: scale(0.96);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .landing > div {
+    padding: 35px 25px;
+  }
+
+  .landing h1 {
+    font-size: 2rem;
+  }
+
+  .landing h2 {
+    font-size: 1rem;
+  }
+
+  .landing > div > div {
+    flex-direction: column;
+  }
+
+  .landing button {
+    width: 100%;
+  }
+}

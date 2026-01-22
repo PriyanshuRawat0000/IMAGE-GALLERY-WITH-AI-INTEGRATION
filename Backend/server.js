@@ -6,14 +6,22 @@ const authRoutes = require('./src/routes/auth');
 const bodyParser = require('body-parser');
 const cron = require("node-cron");
 const  {dailyImageGenerator}= require("./src/controllers/imagegenerator.js");
+const cors = require('cors');
 
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
-
-
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions))
 
 app.use('/api/auth', authRoutes);
+app.use('/', (req,res)=>{
+  res.send("API is running....");
+});
 
 connectDB();
 

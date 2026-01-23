@@ -17,8 +17,8 @@ const Login = () => {
         password
       });
       //localStorage.setItem("accessToken",res.data.accessToken);
-      console.log("FULL RESPONSE:", res.data);
-      alert(JSON.stringify(res.data));
+      // console.log("FULL RESPONSE:", res.data);
+      // alert(JSON.stringify(res.data));
 
       alert(res.data.message);
     }

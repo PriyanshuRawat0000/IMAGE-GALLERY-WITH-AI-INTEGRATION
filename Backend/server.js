@@ -5,8 +5,9 @@ const app = express();
 const authRoutes = require('./src/routes/auth');
 const bodyParser = require('body-parser');
 const cron = require("node-cron");
-const  {dailyImageGenerator}= require("./src/controllers/imagegenerator.js");
+const { dailyImageGenerator } = require("./src/controllers/imagegenerator.js");
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const PORT = process.env.PORT || 5000;
 
@@ -17,9 +18,10 @@ const corsOptions = {
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions))
+app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
-app.use('/', (req,res)=>{
+app.use('/', (req, res) => {
   res.send("API is running....");
 });
 

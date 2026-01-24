@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema({
     required: true
   },
 
+  refreshToken: {
+    type: String,
+    default: null
+  },
+
   imageIds: [
     {
       type: mongoose.Schema.Types.ObjectId,

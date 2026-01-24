@@ -16,8 +16,11 @@ const Login = () => {
         email,
         password
       });
-      localStorage.setItem("accessToken",res.data.accessToken);
-      alert("Login Successful");
+      //localStorage.setItem("accessToken",res.data.accessToken);
+      // console.log("FULL RESPONSE:", res.data);
+      // alert(JSON.stringify(res.data));
+
+      alert(res.data.message);
     }
     catch(err){
       alert(err.response.data.message);
@@ -25,21 +28,20 @@ const Login = () => {
   }
 
   return (
-    <div className="login-container">
+    <div className="login-container" onSubmit={handleSubmit}>
       <h1>Welcome Back</h1>
       <h3>Login to your Account</h3>
       <form className='loginForm'>
-        form.preventDefault();
-
+       
         <label htmlFor='email'>Email</label>
         <br />
-        <input type='email' id='email' name='email' placeholder='Enter your email' required />
+        <input type='email' id='email' value={email} name='email' placeholder='Enter your email' onChange={(e)=>setEmail(e.target.value)}required />
         <br />
         <label htmlFor='password'>Password</label>
         <br />
-        <input type='password' id='password' name='password' placeholder='Enter your password' required />
+        <input type='password' id='password' name='password' placeholder='Enter your password' onChange={(e)=>setPassword(e.target.value)} required />
         <br />
-        <button type='submit' onClick={()}>Login</button>
+        <button type='submit' >Login</button>
       </form>
       <h4>Dont have an account? <a href='/signUp'>Sign Up</a></h4>
     </div>

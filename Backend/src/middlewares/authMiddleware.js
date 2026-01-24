@@ -20,7 +20,7 @@ const loginMiddleware = (req, res, next) => {
 };
 
 const signupMiddleware = (req, res, next) => {
-    const { email, username, password } = req.body;
+    const {  username,email, password } = req.body;
     if (!email || !username || !password) {
         return res.status(400).json({
             message: "INCOMPLETE CREDENTIALS"

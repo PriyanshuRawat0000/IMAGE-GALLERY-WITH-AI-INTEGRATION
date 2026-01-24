@@ -6,3 +6,4 @@ const {getAllImages} = require("../controllers/imagegenerator.js");
 const router = express.Router();
 
 router.get("/images", getAllImages);
+module.exports = router;

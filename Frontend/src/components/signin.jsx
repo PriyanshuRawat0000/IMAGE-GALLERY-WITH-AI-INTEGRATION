@@ -1,11 +1,13 @@
 import React from 'react'
 import './signin.css'
 import API from '../api/axios.js'
+import {Link,useNavigate} from 'react-router-dom';
 import {useState} from 'react'
 const SignUp = () => {
   const [username,setUsername]=useState('');
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
+  const navigate=useNavigate();
   const handleSubmit=async (e)=>{
     e.preventDefault();
     try{
@@ -16,6 +18,8 @@ const SignUp = () => {
       })
       console.log(res.data);
       alert(res.data.message);
+      localStorage.setItem("accessToken", res.data.accessToken);
+      navigate("/dashboard", { replace: true });
     }
     catch(err){
       
@@ -46,7 +50,7 @@ const SignUp = () => {
         <br />
         <button type='submit'>Sign Up</button>
       </form>
-      <h4>Already have an account? <a href='/login'>Login</a></h4>
+      <h4>Already have an account? <Link to="/login">Login</Link></h4>
     </div>
   )
 }

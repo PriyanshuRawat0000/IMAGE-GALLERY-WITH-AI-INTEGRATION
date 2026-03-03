@@ -1,14 +1,15 @@
 import React from 'react';
 import './login.css';
 import {useState} from 'react';
+import {Link} from 'react-router-dom';
 import API from '../api/axios.js';
-
+import {useNavigate} from 'react-router-dom';
 
 
 const Login = () => {
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
-
+  const navigate=useNavigate();
   const handleSubmit=async(form)=>{
     form.preventDefault();
     try{
@@ -21,6 +22,12 @@ const Login = () => {
       // alert(JSON.stringify(res.data));
 
       alert(res.data.message);
+      if (res.data.accessToken) {
+        localStorage.setItem("accessToken", res.data.accessToken);
+      }
+
+
+      navigate("/dashboard", { replace: true });
     }
     catch(err){
       alert(err.response.data.message);
@@ -28,10 +35,10 @@ const Login = () => {
   }
 
   return (
-    <div className="login-container" onSubmit={handleSubmit}>
+    <div className="login-container" >
       <h1>Welcome Back</h1>
       <h3>Login to your Account</h3>
-      <form className='loginForm'>
+      <form className='loginForm' onSubmit={handleSubmit}>
        
         <label htmlFor='email'>Email</label>
         <br />
@@ -43,7 +50,7 @@ const Login = () => {
         <br />
         <button type='submit' >Login</button>
       </form>
-      <h4>Dont have an account? <a href='/signUp'>Sign Up</a></h4>
+      <h4>Dont have an account? <Link to="/signup">Sign Up</Link></h4>
     </div>
   )
 }

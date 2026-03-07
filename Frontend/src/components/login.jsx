@@ -7,31 +7,35 @@ import {useNavigate} from 'react-router-dom';
 
 
 const Login = () => {
+
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
   const navigate=useNavigate();
+  
   const handleSubmit=async(form)=>{
     form.preventDefault();
-    try{
-      const res=await API.post("/auth/login",{
-        email,
-        password
-      });
-      //localStorage.setItem("accessToken",res.data.accessToken);
-      // console.log("FULL RESPONSE:", res.data);
-      // alert(JSON.stringify(res.data));
+    navigate("/dashboard", { replace: true });
+    // try{
+    //   navigate("/dashboard", { replace: true });
+    //   const res=await API.post("/auth/login",{
+    //     email,
+    //     password
+    //   });
+    //   //localStorage.setItem("accessToken",res.data.accessToken);
+    //   // console.log("FULL RESPONSE:", res.data);
+    //   // alert(JSON.stringify(res.data));
 
-      alert(res.data.message);
-      if (res.data.accessToken) {
-        localStorage.setItem("accessToken", res.data.accessToken);
-      }
+    //   alert(res.data.message);
+    //   if (res.data.accessToken) {
+    //     localStorage.setItem("accessToken", res.data.accessToken);
+    //   }
 
 
-      navigate("/dashboard", { replace: true });
-    }
-    catch(err){
-      alert(err.response.data.message);
-    }
+    //   navigate("/dashboard", { replace: true });
+    // }
+    // catch(err){
+    //   alert(err.response.data.message);
+    // }
   }
 
   return (

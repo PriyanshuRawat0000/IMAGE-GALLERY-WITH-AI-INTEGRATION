@@ -21,33 +21,72 @@ export default function Dashboard() {
   };
 
 
+//   useEffect(() => {
+
+//   const images = mockImages;
+
+//   const now = new Date();
+//   const recent = [];
+//   const older = [];
+
+//   images.forEach((img) => {
+
+//     const created = new Date(img.createdAt);
+//     const diff = (now - created) / (1000 * 60 * 60);
+
+//     if (diff <= 24) recent.push(img);
+//     else older.push(img);
+
+//   });
+
+//   setRecentImages(recent);
+//   setOlderImages(older);
+//   setLoading(false);
+
+// }, []);
   useEffect(() => {
+    fetchImages();
+  }, []);
+const fetchImages = async () => {
+  try {
+    const res = await axios.get("http://localhost:5000/api/images");
+    
+    console.log(res.data);
+    const images = res.data; // backend returns array directly
 
-  const images = mockImages;
+    const now = new Date();
+    const recent = [];
+    const older = [];
 
-  const now = new Date();
-  const recent = [];
-  const older = [];
+    images.forEach((img) => {
 
-  images.forEach((img) => {
+      const created = new Date(img.createdAt);
+      const diff = (now - created) / (1000 * 60 * 60);
 
-    const created = new Date(img.createdAt);
-    const diff = (now - created) / (1000 * 60 * 60);
+      const formatted = {
+        id: img._id,
+        imageUrl: img.url,
+        title: img.title || "AI Image",
+        type: img.type === "paid" ? "Paid" : "Free",
+        price: img.price,
+        downloads: img.downloadCount,
+        category: "AI",
+        createdAt: img.createdAt
+      };
 
-    if (diff <= 24) recent.push(img);
-    else older.push(img);
+      if (diff <= 24) recent.push(formatted);
+      else older.push(formatted);
+    });
 
-  });
+    setRecentImages(recent);
+    setOlderImages(older);
+    setLoading(false);
 
-  setRecentImages(recent);
-  setOlderImages(older);
-  setLoading(false);
-
-}, []);
-  // useEffect(() => {
-  //   fetchImages();
-  // }, []);
-
+  } catch (err) {
+    console.log("hello kam ni hora");
+    console.error(err);
+  }
+};
   // const fetchImages = async () => {
   //   try {
   //     const res = await axios.get("http://localhost:5000/api/images");

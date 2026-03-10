@@ -14,28 +14,28 @@ const Login = () => {
   
   const handleSubmit=async(form)=>{
     form.preventDefault();
-    navigate("/dashboard", { replace: true });
-    // try{
-    //   navigate("/dashboard", { replace: true });
-    //   const res=await API.post("/auth/login",{
-    //     email,
-    //     password
-    //   });
-    //   //localStorage.setItem("accessToken",res.data.accessToken);
-    //   // console.log("FULL RESPONSE:", res.data);
-    //   // alert(JSON.stringify(res.data));
+    
+    try{
+      //navigate("/dashboard", { replace: true });
+      const res=await axios.post("http://localhost:5000/api/auth/login",{
+        email,
+        password
+      });
+      //localStorage.setItem("accessToken",res.data.accessToken);
+      console.log("FULL RESPONSE:", res.data);
+      // alert(JSON.stringify(res.data));
 
-    //   alert(res.data.message);
-    //   if (res.data.accessToken) {
-    //     localStorage.setItem("accessToken", res.data.accessToken);
-    //   }
+      alert( `hello ${res.data.message}`);
+      if (res.data.accessToken) {
+        localStorage.setItem("accessToken", res.data.accessToken);
+      }
 
 
-    //   navigate("/dashboard", { replace: true });
-    // }
-    // catch(err){
-    //   alert(err.response.data.message);
-    // }
+      navigate("/dashboard", { replace: true });
+    }
+    catch(err){
+      alert(err.response.data.message);
+    }
   }
 
   return (

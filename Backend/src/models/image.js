@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const imageSchema = new mongoose.Schema({
 
-  
+
 
   cloudinaryId: {
     type: String,
@@ -19,7 +19,7 @@ const imageSchema = new mongoose.Schema({
     default: ''
   },
 
-  
+
 
   type: {
     type: String,

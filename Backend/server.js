@@ -17,13 +17,16 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200
 };
+
 app.use(cors(corsOptions))
 app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/images', require('./src/routes/images'));
 app.use('/', (req, res) => {
   res.send("API is running....");
 });
+
 
 connectDB();
 

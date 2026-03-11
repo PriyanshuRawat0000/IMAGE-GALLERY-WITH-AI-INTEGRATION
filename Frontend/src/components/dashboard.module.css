@@ -39,3 +39,9 @@
 .content{
   width:100%;
 }
+
+.otherTabs{
+  display:flex;
+  gap:20px;
+  margin-bottom:30px;
+}

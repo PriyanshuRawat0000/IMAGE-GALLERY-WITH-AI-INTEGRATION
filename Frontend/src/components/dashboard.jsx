@@ -4,11 +4,15 @@ import RecentGrid from "./recentGrid";
 import styles from "./dashboard.module.css";
 import axios from "axios";
 import mockImages from "./mockImages.js";
-export default function Dashboard() {
+import {useNavigate} from 'react-router-dom';
+import {User as UserIcon,Library as LibraryIcon,LogOut as LogOutIcon} from 'lucide-react';
 
-  const [activeTab, setActiveTab] = useState("recent");
-  const [recentImages, setRecentImages] = useState([]);
-  const [olderImages, setOlderImages] = useState([]);
+export default function Dashboard() {
+  const navigate = useNavigate();
+  const [showLogoutTab, setShowLogoutTab] = useState(false);
+  //const [activeTab, setActiveTab] = useState("recent");
+  const [formattedImages, setFormattedImages] = useState([]);
+  //const [olderImages, setOlderImages] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const handleDownload = (image) => {
@@ -21,29 +25,7 @@ export default function Dashboard() {
   };
 
 
-//   useEffect(() => {
 
-//   const images = mockImages;
-
-//   const now = new Date();
-//   const recent = [];
-//   const older = [];
-
-//   images.forEach((img) => {
-
-//     const created = new Date(img.createdAt);
-//     const diff = (now - created) / (1000 * 60 * 60);
-
-//     if (diff <= 24) recent.push(img);
-//     else older.push(img);
-
-//   });
-
-//   setRecentImages(recent);
-//   setOlderImages(older);
-//   setLoading(false);
-
-// }, []);
   useEffect(() => {
     fetchImages();
   }, []);
@@ -52,16 +34,16 @@ const fetchImages = async () => {
     const res = await axios.get("http://localhost:5000/api/images");
     
     console.log(res.data);
-    const images = res.data; // backend returns array directly
+    const images = res.data; 
 
     const now = new Date();
-    const recent = [];
-    const older = [];
+    const formattedImages = [];
+    //const older = [];
 
     images.forEach((img) => {
 
-      const created = new Date(img.createdAt);
-      const diff = (now - created) / (1000 * 60 * 60);
+      // const created = new Date(img.createdAt);
+      // const diff = (now - created) / (1000 * 60 * 60);
 
       const formatted = {
         id: img._id,
@@ -74,12 +56,13 @@ const fetchImages = async () => {
         createdAt: img.createdAt
       };
 
-      if (diff <= 24) recent.push(formatted);
-      else older.push(formatted);
+      // if (diff <= 24) recent.push(formatted);
+      // else 
+      formattedImages.push(formatted);
     });
 
-    setRecentImages(recent);
-    setOlderImages(older);
+    setFormattedImages(formattedImages);
+    //setOlderImages([]);
     setLoading(false);
 
   } catch (err) {
@@ -87,48 +70,18 @@ const fetchImages = async () => {
     console.error(err);
   }
 };
-  // const fetchImages = async () => {
-  //   try {
-  //     const res = await axios.get("http://localhost:5000/api/images");
 
-  //     const images = res.data;
+ const handleLogout=()=>{
+  
+  localStorage.removeItem("token");
+  navigate('/login');
 
-  //     const now = new Date();
-  //     const recent = [];
-  //     const older = [];
-
-  //     images.forEach((img) => {
-  //       const created = new Date(img.createdAt);
-  //       const diff = (now - created) / (1000 * 60 * 60);
-
-  //       const formatted = {
-  //         id: img._id,
-  //         imageUrl: img.url,
-  //         title: img.title || "AI Image",
-  //         type: img.type === "paid" ? "Paid" : "Free",
-  //         price: img.price,
-  //         downloads: img.downloadCount,
-  //         category: "AI",
-  //         createdAt: img.createdAt
-  //       };
-
-  //       if (diff <= 24) recent.push(formatted);
-  //       else older.push(formatted);
-  //     });
-
-  //     setRecentImages(recent);
-  //     setOlderImages(older);
-  //     setLoading(false);
-
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-  const tabs = [
-    { id: "recent", label: "Recent" },
-    { id: "older", label: "Older" }
-  ];
+ }
+ 
+  // const tabs = [
+  //   { id: "recent", label: "Recent" },
+  //   { id: "older", label: "Older" }
+  // ];
 
   return (
     <div className={styles.dashboard}>
@@ -136,29 +89,45 @@ const fetchImages = async () => {
       <div className={styles.header}>
         <div className={styles.logo}>AI <span>Gallery</span></div>
 
-        <Tabs
+        {/* <Tabs
           tabs={tabs}
           activeTab={activeTab}
           onTabChange={setActiveTab}
+        /> */}
+        <div className={styles.otherTabs}>
+          <UserIcon
+            className={styles.usericon}
+            onClick={() => navigate('/profile')}
+          />
+          <LibraryIcon
+            className={styles.libraryicon}
+            onClick={() => navigate('/library')}
+          />
+          <LogOutIcon
+            className={styles.logouticon}
+            onClick={() => handleLogout()}
         />
-
-        <div className={styles.profile}></div>
+        </div>
+        
+        {/* <div className={styles.library}>Library</div>
+        <div className={styles.profile}>Profile</div>
+        <button className={styles.logout} onClick={()=>handleLogout()}>Logout</button> */}
       </div>
 
       <div className={styles.content}>
-        {activeTab === "recent" ? (
+        {/* {activeTab === "recent" ? ( */}
           <RecentGrid
-            images={recentImages}
+            images={formattedImages}
             loading={loading}
             onDownload={handleDownload}
           />
-        ) : (
+        {/* ) : (
           <RecentGrid
             images={olderImages}
             loading={loading}
             onDownload={handleDownload}
           />
-        )}
+        )} */}
       </div>
 
     </div>

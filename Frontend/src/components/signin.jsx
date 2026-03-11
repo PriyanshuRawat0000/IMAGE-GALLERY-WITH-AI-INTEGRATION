@@ -11,14 +11,14 @@ const SignUp = () => {
   const handleSubmit=async (e)=>{
     e.preventDefault();
     try{
-      const res=await API.post("/auth/signup",{
+      const res=await API.post("/api/auth/signup",{
         username,
         email,
         password,
       })
       console.log(res.data);
       alert(res.data.message);
-      localStorage.setItem("accessToken", res.data.accessToken);
+      //localStorage.setItem("accessToken", res.data.accessToken);
       navigate("/dashboard", { replace: true });
     }
     catch(err){

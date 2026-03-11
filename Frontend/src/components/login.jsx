@@ -3,6 +3,7 @@ import './login.css';
 import {useState} from 'react';
 import {Link} from 'react-router-dom';
 import API from '../api/axios.js';
+import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 
 
@@ -26,9 +27,9 @@ const Login = () => {
       // alert(JSON.stringify(res.data));
 
       alert( `hello ${res.data.message}`);
-      if (res.data.accessToken) {
-        localStorage.setItem("accessToken", res.data.accessToken);
-      }
+      // if (res.data.accessToken) {
+      //   localStorage.setItem("accessToken", res.data.accessToken);
+      // }
 
 
       navigate("/dashboard", { replace: true });

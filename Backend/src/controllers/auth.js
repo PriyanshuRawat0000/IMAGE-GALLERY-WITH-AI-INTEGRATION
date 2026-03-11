@@ -16,6 +16,7 @@ const login = async (req, res) => {
             return res.status(400).json({ message: "INVALID CREDENTIALS" });
         }
 
+        console.log("USER FOUND:", findUser);
         const accessToken = generateAccessToken(findUser._id);
         const refreshToken = generateRefreshToken(findUser._id);
 
@@ -66,7 +67,7 @@ const signup = async (req, res) => {
                 password: hashedPassword
             })
 
-            await newUser.save();
+            //await newUser.save();
 
             const accessToken = generateAccessToken(newUser._id);
             const refreshToken = generateRefreshToken(newUser._id);

@@ -17,19 +17,19 @@ const Login = () => {
     form.preventDefault();
     
     try{
-      //navigate("/dashboard", { replace: true });
-      const res=await axios.post("http://localhost:5000/api/auth/login",{
+      
+      const res=await API.post("api/auth/login",{
         email,
         password
       });
-      //localStorage.setItem("accessToken",res.data.accessToken);
+      
       console.log("FULL RESPONSE:", res.data);
-      // alert(JSON.stringify(res.data));
+      alert(JSON.stringify(res.data));
 
       alert( `hello ${res.data.message}`);
-      // if (res.data.accessToken) {
-      //   localStorage.setItem("accessToken", res.data.accessToken);
-      // }
+      
+      
+      
 
 
       navigate("/dashboard", { replace: true });

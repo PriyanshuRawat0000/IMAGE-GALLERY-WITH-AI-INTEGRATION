@@ -1,10 +1,28 @@
 import React from 'react';
 import { Outlet,Navigate } from 'react-router-dom';
-
+import {useState,useEffect} from 'react';
+import API from '../api/axios.js';
 export const ProtectedRoutes=()=>{
-    const auth=localStorage.getItem('token');
-    
-    if(false){
+    const [isAuthenticated,setIsAuthenticated]=useState(null);
+    useEffect(
+        ()=>{
+            const checkAuth=async ()=>{
+                try{
+                    const res=await API.post('/api/auth/verify');
+                    setIsAuthenticated(true);
+                }
+                catch{
+                    setIsAuthenticated(false);
+                }
+            };
+            checkAuth();
+        },[]
+    );
+
+    if(isAuthenticated===null){
+        return;
+    }
+    if(!isAuthenticated){
        // alert("token not found")
         return <Navigate to='/login'/>
     }

@@ -27,7 +27,7 @@ const login = async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
-            maxAge: 15 * 60 * 1000 // 15 minutes
+            maxAge: 10 * 1000 // 15 minutes
         });
 
         res.cookie('refreshToken', refreshToken, {
@@ -67,7 +67,7 @@ const signup = async (req, res) => {
                 password: hashedPassword
             })
 
-            //await newUser.save();
+            await newUser.save();
 
             const accessToken = generateAccessToken(newUser._id);
             const refreshToken = generateRefreshToken(newUser._id);
@@ -188,5 +188,26 @@ const refresh = async (req, res) => {
     }
 }
 
+const verify=async(req,res)=>{
+    //const accessToken=req.cookies.accessToken;
+    try{
+        const user=await User.findById(req.userId);
+        if(!user){
+            res.status(401).json({
+                message:"user not found"
+            });
+        }
+        res.status(200).json({
+            message:"authorised",
+            user
+        });
+    }
+    catch(err){
+        res.status(500).json({
+            message:"Internal Server Error"
+        });
+    }
+    
+}
 
-module.exports = { login, signup, update, refresh, logout };
+module.exports = { login, signup, update, refresh, logout ,verify};

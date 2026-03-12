@@ -18,7 +18,7 @@ const SignUp = () => {
       })
       console.log(res.data);
       alert(res.data.message);
-      //localStorage.setItem("accessToken", res.data.accessToken);
+      
       navigate("/dashboard", { replace: true });
     }
     catch(err){

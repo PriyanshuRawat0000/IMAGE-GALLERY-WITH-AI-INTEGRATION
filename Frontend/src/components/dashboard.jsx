@@ -3,6 +3,7 @@ import Tabs from "./tabs";
 import RecentGrid from "./recentGrid";
 import styles from "./dashboard.module.css";
 import axios from "axios";
+import API from "../api/axios.js"
 import mockImages from "./mockImages.js";
 import {useNavigate} from 'react-router-dom';
 import {User as UserIcon,Library as LibraryIcon,LogOut as LogOutIcon} from 'lucide-react';
@@ -71,10 +72,18 @@ const fetchImages = async () => {
   }
 };
 
- const handleLogout=()=>{
+ const handleLogout=async ()=>{
+    try{
+      await API.post("/api/auth/logout");
+      navigate("/login");
+
+    }
+    catch(err){
+      alert(err);
+    }
+    
   
-  localStorage.removeItem("token");
-  navigate('/login');
+  
 
  }
  

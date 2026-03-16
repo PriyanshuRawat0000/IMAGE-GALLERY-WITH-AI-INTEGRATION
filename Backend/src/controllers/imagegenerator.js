@@ -3,6 +3,7 @@
 const { HfInference } = require("@huggingface/inference");
 const cloudinary = require("../config/cloudinary");
 const Image = require("../models/image");
+const User =require("../models/user");
 
 const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
 
@@ -56,8 +57,47 @@ const getAllImages = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+const addImage = async (req, res) => {
+  try {
 
+      const { imageId } = req.body;
+
+      const user = await User.findById(req.userId);
+
+      user.imageIds.push(imageId);
+
+      await user.save();
+
+      res.status(200).json({
+        message: "Image added"
+      });
+
+  } catch(err){
+      res.status(500).json({error:err.message});
+  }
+};
+
+
+
+const getImagesByUserId = async (req, res) => {
+  try {
+
+    const user = await User.findById(req.userId);
+    const imageList=user.imageIds;
+    res.json(imageList);
+
+    
+
+    
+
+  } catch (err) {
+    res.status(500).json({
+      error: err.message
+    });
+  }
+};
 module.exports = {
   dailyImageGenerator,
-  getAllImages
+  getAllImages,
+  addImage
 };

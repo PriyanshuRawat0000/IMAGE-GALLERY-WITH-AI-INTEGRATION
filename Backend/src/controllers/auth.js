@@ -17,17 +17,18 @@ const login = async (req, res) => {
         }
 
         console.log("USER FOUND:", findUser);
-        const accessToken = generateAccessToken(findUser._id);
-        const refreshToken = generateRefreshToken(findUser._id);
+        const accessToken = generateAccessToken(findUser);
+        const refreshToken = generateRefreshToken(findUser);
 
         findUser.refreshToken = refreshToken;
         await findUser.save();
-
+       
         res.cookie('accessToken', accessToken, {
+            
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
-            maxAge: 10 * 1000 // 15 minutes
+            maxAge: 15 * 60 * 1000 // 15 minutes
         });
 
         res.cookie('refreshToken', refreshToken, {

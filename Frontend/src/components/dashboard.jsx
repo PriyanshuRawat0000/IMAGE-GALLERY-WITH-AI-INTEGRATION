@@ -16,14 +16,31 @@ export default function Dashboard() {
   //const [olderImages, setOlderImages] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const handleDownload = (image) => {
-    const link = document.createElement("a");
-    link.href = image.imageUrl;
-    link.download = image.title || "ai-image";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const handleDownload = async (image) => {
+  
+  
+    try {
+      await API.post("api/images/addImage",{
+        imageId:image.id,
+
+      });
+
+      const downloadUrl = image.imageUrl.replace(
+        "/upload/",
+        "/upload/fl_attachment/"
+      );
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = image.title || "ai-image";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+    catch (err) {
+      alert("download failed: " + err);
+    }
+  
+};
 
 
 
@@ -32,7 +49,7 @@ export default function Dashboard() {
   }, []);
 const fetchImages = async () => {
   try {
-    const res = await axios.get("http://localhost:5000/api/images");
+    const res = await API.get("api/images");
     
     console.log(res.data);
     const images = res.data; 

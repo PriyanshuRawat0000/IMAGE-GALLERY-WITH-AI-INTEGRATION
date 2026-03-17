@@ -79,16 +79,23 @@ const addImage = async (req, res) => {
 
 
 
+
 const getImagesByUserId = async (req, res) => {
   try {
-
     const user = await User.findById(req.userId);
-    const imageList=user.imageIds;
-    res.json(imageList);
 
-    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-    
+    const imageList = user.imageIds;
+
+   
+    const images = await Image.find({
+      _id: { $in: imageList }
+    });
+
+    res.status(200).json(images);
 
   } catch (err) {
     res.status(500).json({
@@ -99,5 +106,6 @@ const getImagesByUserId = async (req, res) => {
 module.exports = {
   dailyImageGenerator,
   getAllImages,
-  addImage
+  addImage,
+  getImagesByUserId
 };

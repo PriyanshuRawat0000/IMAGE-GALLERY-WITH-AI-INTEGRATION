@@ -8,6 +8,6 @@ router.post('/signup', signupMiddleware, signup);
 router.put('/update', authMiddleware, updateMiddleware, update);
 router.post('/refresh', refresh);
 router.post('/logout', logout);
-router.post('/verify',authMiddleware,verify)
+router.post('/verify',authMiddleware,verify);
 
 module.exports = router;

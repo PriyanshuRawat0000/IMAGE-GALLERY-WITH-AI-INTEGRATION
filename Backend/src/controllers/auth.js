@@ -52,6 +52,7 @@ const signup = async (req, res) => {
     const { username, email, password } = req.body;
 
     try {
+        //alert(`email is :${email} username is ${username}`);
         let findUser = await User.findOne({ $or: [{ email: email }, { username: username }] });
         if (findUser) {
             return res.status(400).json({
@@ -59,6 +60,7 @@ const signup = async (req, res) => {
             });
         }
         else {
+            //alert("user was found");
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -69,9 +71,9 @@ const signup = async (req, res) => {
             })
 
             await newUser.save();
-
-            const accessToken = generateAccessToken(newUser._id);
-            const refreshToken = generateRefreshToken(newUser._id);
+            //alert("error still not here");
+            const accessToken = generateAccessToken(newUser);
+            const refreshToken = generateRefreshToken(newUser);
 
             newUser.refreshToken = refreshToken;
             await newUser.save();
@@ -173,7 +175,7 @@ const refresh = async (req, res) => {
             return res.status(403).json({ message: "Invalid refresh token" });
         }
 
-        const newAccessToken = generateAccessToken(user._id);
+        const newAccessToken = generateAccessToken(user);
 
         res.cookie('accessToken', newAccessToken, {
             httpOnly: true,

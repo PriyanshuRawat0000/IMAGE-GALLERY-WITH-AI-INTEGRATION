@@ -21,6 +21,7 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(cookieParser());
 app.use("/api/images/addImage",require('./src/routes/images'));
+app.use("/api/images/getImageByUserId",require('./src/routes/images'));
 app.use("/api/images/generateImage",require('./src/routes/images'));
 app.use('/api/auth', authRoutes);
 app.use('/api/images', require('./src/routes/images'));

@@ -6,23 +6,43 @@ import axios from "axios";
 import API from "../api/axios.js"
 import mockImages from "./mockImages.js";
 import {useNavigate} from 'react-router-dom';
-
+import {User as UserIcon,Home as DashBoardIcon,LogOut as LogOutIcon} from 'lucide-react';
 
 export default function Library() {
+  //alert("hello ji");
   const navigate = useNavigate();
-  
+  const [showLogoutTab, setShowLogoutTab] = useState(false);
+  //const [activeTab, setActiveTab] = useState("recent");
   const [formattedImages, setFormattedImages] = useState([]);
-  
+  //const [olderImages, setOlderImages] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const handleDownload = (image) => {
-    const link = document.createElement("a");
-    link.href = image.imageUrl;
-    link.download = image.title || "ai-image";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const handleDownload = async (image) => {
+  
+  
+    try {
+      await API.post("api/images/addImage",{
+        imageId:image.id,
+
+      });
+
+
+      const downloadUrl = image.imageUrl.replace(
+        "/upload/",
+        "/upload/fl_attachment/"
+      );
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = image.title || "ai-image";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+    catch (err) {
+      alert("download failed: " + err);
+    }
+  
+};
 
 
 
@@ -31,7 +51,7 @@ export default function Library() {
   }, []);
 const fetchImages = async () => {
   try {
-    const res = await axios.get("http://localhost:5000/api/images");
+    const res = await API.post("api/images/getImageByUserId");
     
     console.log(res.data);
     const images = res.data; 
@@ -107,9 +127,9 @@ const fetchImages = async () => {
             className={styles.usericon}
             onClick={() => navigate('/profile')}
           />
-          <LibraryIcon
-            className={styles.libraryicon}
-            onClick={() => navigate('/library')}
+          <DashBoardIcon
+            className={styles.dashboardicon}
+            onClick={() => navigate('/dashboard')}
           />
           <LogOutIcon
             className={styles.logouticon}

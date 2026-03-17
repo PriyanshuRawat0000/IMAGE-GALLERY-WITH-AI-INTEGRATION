@@ -24,9 +24,9 @@ const Login = () => {
       });
       
       console.log("FULL RESPONSE:", res.data);
-      alert(JSON.stringify(res.data));
+      //alert(JSON.stringify(res.data));
 
-      alert( `hello ${res.data.message}`);
+      //alert( `hello ${res.data.message}`);
       
       
       

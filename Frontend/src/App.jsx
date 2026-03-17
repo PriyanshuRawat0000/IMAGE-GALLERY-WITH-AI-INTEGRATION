@@ -4,6 +4,7 @@ import Landing from './components/landing.jsx'
 import Login from './components/login.jsx'
 import SignUp from './components/signin.jsx'
 import Dashboard from './components/dashboard.jsx'
+import Library from './components/library.jsx'
 import { ProtectedRoutes } from './utils/protectedroutes.jsx'
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
           <Route path='/signUp' element={<SignUp />} />
           <Route element={<ProtectedRoutes />}>
             <Route path='/dashboard' element={<Dashboard />} />
+            <Route path='/library' element={<Library/>}/>
           </Route>
         </Routes>
       </Router>

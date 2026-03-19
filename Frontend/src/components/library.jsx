@@ -115,7 +115,7 @@ const fetchImages = async () => {
     <div className={styles.dashboard}>
 
       <div className={styles.header}>
-        <div className={styles.logo}>AI <span>Gallery</span></div>
+        <div className={styles.logo}><span>LIBRARY</span></div>
 
         {/* <Tabs
           tabs={tabs}

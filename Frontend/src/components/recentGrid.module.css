@@ -43,7 +43,12 @@
   font-size: 1rem;
   color: #999;
 }
-
+/* @media (max-width:1300px){
+  .grid{
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap:1.25rem;
+  }
+} */
 @media (max-width: 1024px) {
   .grid {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));

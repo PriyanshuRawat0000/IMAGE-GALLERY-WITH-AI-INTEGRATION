@@ -103,6 +103,26 @@ const signup = async (req, res) => {
     }
 }
 
+const fetchDetails = async (req,res)=>{
+    const userId=req.userId;
+    try{
+        console.log("yaha tak pahuch gaya");
+        const user=await User.findById(userId);
+        console.log("chal to raha hai");
+        return res.status(200).json({
+            email:user.email,
+            username:user.username
+
+        })
+    }
+    catch(err){
+        console.log(err);
+        return res.status(500).json({
+            message:"kuch ni hora tujhse"
+        });
+    }
+}
+
 const update = async (req, res) => {
     const { currentPassword, newUsername, newEmail, newPassword } = req.body;
 
@@ -213,4 +233,4 @@ const verify=async(req,res)=>{
     
 }
 
-module.exports = { login, signup, update, refresh, logout ,verify};
+module.exports = { login, signup, update, refresh, logout ,verify,fetchDetails};

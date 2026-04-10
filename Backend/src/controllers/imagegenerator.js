@@ -67,7 +67,13 @@ const addImage = async (req, res) => {
       user.imageIds.push(imageId);
 
       await user.save();
-
+      // const image =await Image.findById(imageId);
+      // image.downloadCount+=1;
+      // await image.save();
+      await Image.findByIdAndUpdate(
+        imageId,
+        { $inc: { downloadCount: 1 } }
+      );
       res.status(200).json({
         message: "Image added"
       });

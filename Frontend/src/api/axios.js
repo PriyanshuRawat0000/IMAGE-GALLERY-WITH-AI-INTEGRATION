@@ -29,6 +29,9 @@ async function errorHandler(error){
 
         }
     }
+    else{
+        console.log("something is wrong");
+    }
     return Promise.reject(error)
    
 }

@@ -69,9 +69,12 @@
   border-radius: 16px;
 
   background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(100px);
 
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgb(255, 255, 255);
+  
+  transition: all 0.3s ease;
+
 }
 
 /* TEXTAREA */
@@ -111,8 +114,18 @@
 
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition: all 0.15s ease;
 
-  transition: all 0.2s ease;
+  /* 👇 depth */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.sendIcon:active {
+  transform: translateY(2px) scale(0.95);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .sendIcon:hover {
@@ -120,3 +133,101 @@
   opacity: 0.9;
 }
 
+.loading {
+  position: relative;
+  pointer-events: none;
+}
+
+/* spinner */
+.loading::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border: 2px solid white;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* COLLAPSED STATE */
+/* COLLAPSED STATE */
+.collapsed {
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border-radius: 50%;
+  justify-content: center;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(
+    270deg,
+    #ff0080,
+    #7928ca,
+    #2afadf,
+    #00c6ff,
+    #ff0080
+  );
+
+  background-size: 400% 400%;
+
+  animation: breathe 2.5s ease-in-out infinite,
+             gradientMove 6s ease infinite;
+
+  box-shadow: 0 0 20px rgba(121, 40, 202, 0.6);
+}
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08); /* 👈 slight increase */
+  }
+}
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* EXPANDED STATE */
+.expanded {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  padding: 12px;
+
+  animation: none;
+  transition: all 0.3s ease;
+}
+
+/* ROTATION ANIMATION */
+@keyframes rotatePulse {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

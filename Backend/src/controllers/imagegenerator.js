@@ -4,6 +4,9 @@ const { HfInference } = require("@huggingface/inference");
 const cloudinary = require("../config/cloudinary");
 const Image = require("../models/image");
 const User =require("../models/user");
+const Groq = require('groq-sdk');
+
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
 
@@ -50,14 +53,34 @@ const dailyImageGenerator = async () => {
 
 const generateImage = async (req,res) => {
   console.log("entered generateImage");
+  
   try {
     const prompt=req.body.Prompt;
     console.log(prompt);
+
+    const response = await groq.chat.completions.create({
+    model: "llama-3.3-70b-versatile",
+    messages: [
+      {
+        role: "system",
+        content: "Generate a short, creative title (2-4 words) for an AI-generated image prompt. No quotes. No punctuation."
+      },
+      {
+        role: "user",
+        content: prompt
+      }
+    ],
+    temperature: 0.8,
+    max_tokens: 20
+  });
+
+  const Title= response.choices[0].message.content.trim();
+    console.log(`${Title}`);
     const image = await hf.textToImage({
       //"black-forest-labs/FLUX.1-dev",
       //"stabilityai/stable-diffusion-xl-base-1.0"
-      model:"stabilityai/stable-diffusion-xl-base-1.0",
-
+      //model:"stabilityai/stable-diffusion-xl-base-1.0",
+      model: "stabilityai/stable-diffusion-xl-base-1.0",
       inputs: prompt
     });
 
@@ -71,12 +94,12 @@ const generateImage = async (req,res) => {
     await Image.create({
       cloudinaryId: uploadRes.public_id,
       url: uploadRes.secure_url,
-      title: "The Raiden Shogun"
+      title: Title
     });
     const responseImage={
       cloudinaryId: uploadRes.public_id,
       url: uploadRes.secure_url,
-      title: "The Raiden Shogun"
+      title: Title
     };
     console.log("image generated");
     return res.status(200).json({

@@ -48,6 +48,48 @@ const dailyImageGenerator = async () => {
   }
 };
 
+const generateImage = async (req,res) => {
+  console.log("entered generateImage");
+  try {
+    const prompt=req.body.Prompt;
+    console.log(prompt);
+    const image = await hf.textToImage({
+      //"black-forest-labs/FLUX.1-dev",
+      //"stabilityai/stable-diffusion-xl-base-1.0"
+      model:"stabilityai/stable-diffusion-xl-base-1.0",
+
+      inputs: prompt
+    });
+
+    const base64Image = Buffer.from(await image.arrayBuffer()).toString("base64");
+
+    const uploadRes = await cloudinary.uploader.upload(
+      `data:image/png;base64,${base64Image}`,
+      { folder: "daily_ai_images" }
+    );
+
+    await Image.create({
+      cloudinaryId: uploadRes.public_id,
+      url: uploadRes.secure_url,
+      title: "The Raiden Shogun"
+    });
+    const responseImage={
+      cloudinaryId: uploadRes.public_id,
+      url: uploadRes.secure_url,
+      title: "The Raiden Shogun"
+    };
+    console.log("image generated");
+    return res.status(200).json({
+      generatedImage:responseImage
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      message: "Image generation failed",
+      error: err.message
+    });
+  }
+};
 
 const getAllImages = async (req, res) => {
   try {
@@ -113,5 +155,6 @@ module.exports = {
   dailyImageGenerator,
   getAllImages,
   addImage,
-  getImagesByUserId
+  getImagesByUserId,
+  generateImage
 };

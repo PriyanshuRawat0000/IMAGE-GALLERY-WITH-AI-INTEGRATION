@@ -112,9 +112,9 @@ export default function Profile({ user, downloadCount }) {
                   </div>
                 </div> */}
 
-                <button onClick={() => setIsEditing(true)} className={styles.editBtn}>
+                {/* <button onClick={() => setIsEditing(true)} className={styles.editBtn}>
                   Edit Profile
-                </button>
+                </button> */}
               </>
             )}
           </div>

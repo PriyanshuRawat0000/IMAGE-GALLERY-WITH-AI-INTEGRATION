@@ -22,9 +22,10 @@ app.use(cors(corsOptions))
 app.use(cookieParser());
 app.use("/api/auth/fetchDetails",authRoutes);
 app.use("/api/auth/saveProfile",authRoutes);
-app.use("/api/images/addImage",require('./src/routes/images'));
-app.use("/api/images/getImageByUserId",require('./src/routes/images'));
-app.use("/api/images/generateImage",require('./src/routes/images'));
+// app.use("/api/images",require)
+// app.use("/api/images/addImage",require('./src/routes/images'));
+// app.use("/api/images/getImageByUserId",require('./src/routes/images'));
+// app.use("/api/images/generateImage",require('./src/routes/images'));
 app.use('/api/auth', authRoutes);
 app.use('/api/images', require('./src/routes/images'));
 app.use('/', (req, res) => {

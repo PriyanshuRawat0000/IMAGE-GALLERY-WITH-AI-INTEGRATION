@@ -13,6 +13,21 @@ export default function Prompt() {
 
     try {
       setLoading(true);
+      const countRes = await API.post(
+        "api/images/getCountPerUser"
+      );
+
+      const currentCount = countRes.data.count;
+
+      if (currentCount >= 2) {
+
+        alert("Monthly image limit exceeded");
+
+        setLoading(false);
+
+        return;
+      }
+
       const res = await API.post('api/images/promptToImage', {
         Prompt: prompt
       });

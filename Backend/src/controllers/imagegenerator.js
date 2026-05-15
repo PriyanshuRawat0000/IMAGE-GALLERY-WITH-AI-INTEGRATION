@@ -52,6 +52,7 @@ const dailyImageGenerator = async () => {
 };
 
 const generateImage = async (req,res) => {
+  
   console.log("entered generateImage");
   
   try {
@@ -174,10 +175,55 @@ const getImagesByUserId = async (req, res) => {
     });
   }
 };
+const getCountPerUser = async (req, res) => {
+
+  try {
+
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
+    const imageList = user.imageIds;
+
+    
+    const thirtyDaysAgo = new Date();
+
+    thirtyDaysAgo.setDate(
+      thirtyDaysAgo.getDate() - 30
+    );
+
+   
+    const count = await Image.countDocuments({
+
+      _id: { $in: imageList },
+
+      createdAt: {
+        $gte: thirtyDaysAgo
+      }
+
+    });
+
+    return res.status(200).json({
+      count
+    });
+
+  } catch (err) {
+
+    return res.status(500).json({
+      error: err.message
+    });
+  }
+};
 module.exports = {
   dailyImageGenerator,
   getAllImages,
   addImage,
   getImagesByUserId,
-  generateImage
+  generateImage,
+  getCountPerUser
 };

@@ -6,7 +6,7 @@ import SignUp from './components/signin.jsx'
 import Dashboard from './components/dashboard.jsx'
 import Library from './components/library.jsx'
 import Profile from './components/profile.jsx'
-import { ProtectedRoutes } from './utils/protectedroutes.jsx'
+import { ProtectedRoutes } from './utils/protectedRoutes.jsx'
 
 const App = () => {
   return (

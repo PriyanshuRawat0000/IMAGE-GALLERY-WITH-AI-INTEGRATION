@@ -7,7 +7,7 @@ import API from "../api/axios.js"
 import mockImages from "./mockImages.js";
 import {useNavigate} from 'react-router-dom';
 import {User as UserIcon,Library as LibraryIcon,LogOut as LogOutIcon} from 'lucide-react';
-import Prompt from './Prompt.jsx'
+import Prompt from './prompt.jsx'
 
 export default function Dashboard() {
   const navigate = useNavigate();

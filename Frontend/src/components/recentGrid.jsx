@@ -1,5 +1,5 @@
 import React from 'react';
-import ImageCard from './ImageCard.jsx';
+import ImageCard from './imageCard.jsx';
 import styles from './recentGrid.module.css';
 
 export default function RecentGrid({ images, loading, onDownload }) {

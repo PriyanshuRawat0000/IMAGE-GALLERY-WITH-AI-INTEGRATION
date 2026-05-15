@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Download, TrendingUp } from 'lucide-react';
-import styles from './ImageCard.module.css';
+import styles from './imageCard.module.css';
 
 export default function ImageCard({ image, onDownload, isLibrary = false }) {
 

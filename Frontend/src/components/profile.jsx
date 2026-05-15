@@ -1,6 +1,6 @@
 import React, { useState ,useEffect } from 'react';
 import { User, Mail, Download, Award } from 'lucide-react';
-import styles from './Profile.module.css';
+import styles from './profile.module.css';
 import API from '../api/axios.js';
 export default function Profile({ user, downloadCount }) {
   const [isEditing, setIsEditing] = useState(false);

@@ -13,7 +13,11 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 const corsOptions = {
-  origin: ['https://ai-gallery-xi.vercel.app/','https://ai-gallery-mbx6muwuv-priyanshurawat31415-6531s-projects.vercel.app','https://ai-gallery-git-main-priyanshurawat31415-6531s-projects.vercel.app/'],
+  origin: [
+    'https://ai-gallery-xi.vercel.app',
+    'https://ai-gallery-mbx6muwuv-priyanshurawat31415-6531s-projects.vercel.app',
+    'https://ai-gallery-git-main-priyanshurawat31415-6531s-projects.vercel.app'
+  ],
   credentials: true,
   optionsSuccessStatus: 200
 };

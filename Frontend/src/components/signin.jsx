@@ -31,6 +31,7 @@ const SignUp = () => {
 
   }
   return (
+    <div className="signin">
     <div className="signin-container">
       <h1>Create an Account</h1>
       <h3>Sign up to get started</h3>
@@ -51,6 +52,7 @@ const SignUp = () => {
         <button type='submit'>Sign Up</button>
       </form>
       <h4>Already have an account? <Link to="/login">Login</Link></h4>
+    </div>
     </div>
   )
 }

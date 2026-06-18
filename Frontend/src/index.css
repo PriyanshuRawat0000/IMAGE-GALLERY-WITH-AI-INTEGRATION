@@ -7,6 +7,12 @@
 html {
   scroll-behavior: smooth;
   overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }
 
 body {
@@ -19,4 +25,10 @@ body {
   width: 100%;
   min-height: 100vh;
   overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#root::-webkit-scrollbar {
+  display: none;
 }

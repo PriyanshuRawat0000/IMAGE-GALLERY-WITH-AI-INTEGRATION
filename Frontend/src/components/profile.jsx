@@ -27,7 +27,21 @@ export default function Profile({ user, downloadCount }) {
   useEffect(()=>{
     fetchDetails();
   },[]);
+ 
+  const handleLogout=async ()=>{
+    try{
+      await API.post("/api/auth/logout");
+      navigate("/login");
 
+    }
+    catch(err){
+      alert(err);
+    }
+    
+  
+  
+
+ }
   const handleSave =async () => {
     try{
       const data=await API.post("api/auth/saveProfile",{

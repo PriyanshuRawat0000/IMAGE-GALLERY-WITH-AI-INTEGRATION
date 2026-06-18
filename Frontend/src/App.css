@@ -171,13 +171,29 @@ a:hover {
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+  html {
+    font-size: 15px;
+  }
+
+  button {
+    padding: 0.7rem 1.1rem;
+  }
+
+  input,
+  textarea,
+  select {
+    padding: 0.7rem 0.95rem;
+  }
+}
+
 @media (max-width: 768px) {
   html {
     font-size: 14px;
   }
 
   button {
-    padding: 0.6rem 1.2rem;
+    padding: 0.65rem 1rem;
   }
 
   input,
@@ -190,6 +206,10 @@ a:hover {
 @media (max-width: 480px) {
   html {
     font-size: 13px;
+  }
+
+  button {
+    padding: 0.6rem 0.9rem;
   }
 
   input,

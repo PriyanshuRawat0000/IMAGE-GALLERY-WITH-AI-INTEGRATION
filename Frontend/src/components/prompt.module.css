@@ -231,3 +231,85 @@
     transform: rotate(360deg);
   }
 }
+
+@media (max-width: 1024px) {
+  .promptComponent {
+    bottom: 24px;
+    max-width: 640px;
+  }
+
+  .promptBox {
+    padding: 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  .promptComponent {
+    bottom: 18px;
+    max-width: calc(100vw - 32px);
+    gap: 12px;
+  }
+
+  .imageCard {
+    border-radius: 14px;
+  }
+
+  .promptBox {
+    padding: 10px;
+   
+  }
+
+  .promptInput {
+    font-size: 13px;
+    max-height: 120px;
+  }
+
+  .collapsed {
+    width: 56px;
+    height: 56px;
+  }
+
+  .sendIcon {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+@media (max-width: 480px) {
+  .promptComponent {
+    bottom: 12px;
+    left: 50%;
+    width: calc(100% - 24px);
+    max-width: none;
+    gap: 10px;
+  }
+
+  .imageCard {
+    border-radius: 12px;
+  }
+
+  .promptBox {
+    padding: 9px;
+    
+  }
+
+  .expanded {
+    padding: 10px;
+  }
+
+  .collapsed {
+    width: 52px;
+    height: 52px;
+  }
+
+  .promptInput {
+    font-size: 12px;
+    max-height: 110px;
+  }
+
+  .sendIcon {
+    width: 32px;
+    height: 32px;
+    padding: 7px;
+  }
+}

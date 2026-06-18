@@ -176,12 +176,128 @@ body{
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+  .profile {
+    padding: 24px 28px 24px 24px;
+  }
+
+  .container {
+    padding: 24px 28px;
+  }
+
+  .header {
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.45rem;
+  }
+
+  .otherTabs svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile {
+    padding: 20px 18px 20px 18px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.35rem;
+    margin-bottom: 22px;
+  }
+
+  .container {
+    padding: 18px 20px;
+  }
+
+  .otherTabs {
+    gap: 12px;
+    margin-bottom: 0;
+  }
+
+  .card {
+    padding: 24px;
+    margin-top: 32px;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cancelBtn {
+    margin-left: 0;
+  }
+}
+
 @media (max-width: 600px) {
+  .profile {
+    padding: 16px 14px;
+  }
+
+  .logo {
+    font-size: 22px;
+  }
+
+  .container {
+    padding: 0;
+  }
+
   .card {
     padding: 20px;
+    margin-top: 24px;
   }
 
   .header h1 {
     font-size: 2rem;
+  }
+
+  .infoItem {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .editBtn,
+  .saveBtn,
+  .cancelBtn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile {
+    padding: 12px 10px;
+  }
+
+  .header {
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .otherTabs {
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+
+  .container {
+    padding: 0;
+  }
+
+  .card {
+    padding: 18px;
+    margin-top: 20px;
+  }
+
+  .infoItem p {
+    font-size: 0.95rem;
   }
 }

@@ -39,6 +39,17 @@ export default function Dashboard() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      setFormattedImages((prev)=>(
+        prev.map((img)=>{
+          if(img.id==image.id){
+            return {
+              ...img,downloads:img.downloads+1
+            };
+          }
+          return img;
+        })
+      ))
+     
     }
     catch (err) {
       alert("download failed: " + err);

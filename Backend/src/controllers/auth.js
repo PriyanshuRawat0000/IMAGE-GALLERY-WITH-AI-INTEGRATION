@@ -22,9 +22,9 @@ const login = async (req, res) => {
 
         findUser.refreshToken = refreshToken;
         await findUser.save();
-       
+
         res.cookie('accessToken', accessToken, {
-            
+
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'None',
@@ -103,22 +103,22 @@ const signup = async (req, res) => {
     }
 }
 
-const fetchDetails = async (req,res)=>{
-    const userId=req.userId;
-    try{
+const fetchDetails = async (req, res) => {
+    const userId = req.userId;
+    try {
         // console.log("yaha tak pahuch gaya");
-        const user=await User.findById(userId);
+        const user = await User.findById(userId);
         // console.log("chal to raha hai");
         return res.status(200).json({
-            email:user.email,
-            username:user.username
+            email: user.email,
+            username: user.username
 
         })
     }
-    catch(err){
+    catch (err) {
         // console.log(err);
         return res.status(500).json({
-            message:"kuch ni hora tujhse"
+            message: "kuch ni hora tujhse"
         });
     }
 }
@@ -168,9 +168,18 @@ const logout = async (req, res) => {
             }
         }
 
-        res.clearCookie('accessToken');
-        res.clearCookie('refreshToken');
-        
+        res.clearCookie("accessToken", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "None",
+        });
+
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "None",
+        });
+
         res.status(200).json({ message: "Logout successful" });
     } catch (err) {
         console.error("ERROR DURING LOGOUT", err);
@@ -205,32 +214,32 @@ const refresh = async (req, res) => {
         });
 
         res.status(200).json({ message: "Access token refreshed" });
-        
+
     } catch (err) {
         return res.status(403).json({ message: "Invalid refresh token" });
     }
 }
 
-const verify=async(req,res)=>{
+const verify = async (req, res) => {
     //const accessToken=req.cookies.accessToken;
-    try{
-        const user=await User.findById(req.userId);
-        if(!user){
+    try {
+        const user = await User.findById(req.userId);
+        if (!user) {
             res.status(401).json({
-                message:"user not found"
+                message: "user not found"
             });
         }
         res.status(200).json({
-            message:"authorised",
+            message: "authorised",
             user
         });
     }
-    catch(err){
+    catch (err) {
         res.status(500).json({
-            message:"Internal Server Error"
+            message: "Internal Server Error"
         });
     }
-    
+
 }
 
-module.exports = { login, signup, update, refresh, logout ,verify,fetchDetails};
+module.exports = { login, signup, update, refresh, logout, verify, fetchDetails };

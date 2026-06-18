@@ -1,7 +1,7 @@
 /* MAIN CONTAINER */
 .promptComponent {
   position: fixed;
-  bottom: 30px; /* 👈 gap from bottom */
+  bottom: 30px; 
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
@@ -119,7 +119,7 @@
   justify-content:center;
   transition: all 0.15s ease;
 
-  /* 👇 depth */
+
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 

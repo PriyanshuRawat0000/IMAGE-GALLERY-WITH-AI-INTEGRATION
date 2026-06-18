@@ -16,7 +16,10 @@ export default function Dashboard() {
   const [formattedImages, setFormattedImages] = useState([]);
   //const [olderImages, setOlderImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const handleNewImage=(image)=>{
+    setFormattedImages(prev=>[image,...prev]);
 
+  };
   const handleDownload = async (image) => {
   
   
@@ -52,7 +55,7 @@ const fetchImages = async () => {
   try {
     const res = await API.get("api/images");
     
-    console.log(res.data);
+    // console.log(res.data);
     const images = res.data; 
 
     const now = new Date();
@@ -85,7 +88,7 @@ const fetchImages = async () => {
     setLoading(false);
 
   } catch (err) {
-    console.log("hello kam ni hora");
+    // console.log("hello kam ni hora");
     console.error(err);
   }
 };
@@ -156,7 +159,7 @@ const fetchImages = async () => {
           />
         )} */}
       </div>
-      <Prompt/>
+      <Prompt addNewImage={handleNewImage}/>
 
     </div>
   );

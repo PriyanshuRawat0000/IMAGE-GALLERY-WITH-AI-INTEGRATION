@@ -16,7 +16,7 @@ const SignUp = () => {
         email,
         password,
       })
-      console.log(res.data);
+      // console.log(res.data);
       alert(res.data.message);
       
       navigate("/dashboard", { replace: true });

@@ -12,6 +12,7 @@ export const ProtectedRoutes=()=>{
                     setIsAuthenticated(true);
                 }
                 catch{
+                    // console.log("not working is authenticated false");
                     setIsAuthenticated(false);
                 }
             };

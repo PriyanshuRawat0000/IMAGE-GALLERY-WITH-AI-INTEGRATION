@@ -53,7 +53,7 @@ const fetchImages = async () => {
   try {
     const res = await API.post("api/images/getImageByUserId");
     
-    console.log(res.data);
+    // console.log(res.data);
     const images = res.data; 
 
     const now = new Date();
@@ -86,7 +86,7 @@ const fetchImages = async () => {
     setLoading(false);
 
   } catch (err) {
-    console.log("hello kam ni hora");
+    // console.log("hello kam ni hora");
     console.error(err);
   }
 };

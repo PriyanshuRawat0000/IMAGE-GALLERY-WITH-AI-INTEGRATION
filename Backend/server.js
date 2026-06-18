@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 const corsOptions = {
   origin: [
+    "http://localhost:5173",
     'https://ai-gallery-xi.vercel.app',
     'https://ai-gallery-mbx6muwuv-priyanshurawat31415-6531s-projects.vercel.app',
     'https://ai-gallery-git-main-priyanshurawat31415-6531s-projects.vercel.app'
@@ -40,7 +41,7 @@ app.use('/', (req, res) => {
 connectDB();
 
 app.listen(PORT, () => {
-  console.log(`SERVER IS RUNNING ON PORT ${PORT}`);
+  // console.log(`SERVER IS RUNNING ON PORT ${PORT}`);
   // testing functionality
   // (async () => {
   //   console.log("Testing daily image generator...");

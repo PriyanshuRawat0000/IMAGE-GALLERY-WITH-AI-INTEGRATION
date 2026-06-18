@@ -41,16 +41,16 @@ const signupMiddleware = (req, res, next) => {
 };
 
 const fetchDetailsMiddleware=(req,res,next)=>{
-    console.log("hello i am good");
+    // console.log("hello i am good");
     const token=req.cookies.accessToken;
     if (!token) return res.status(401).json({ message: 'Unauthorized' });
     try{
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-        console.log("kon hu mai");
+        // console.log("kon hu mai");
         req.userId = decoded.userId;
     }
     catch(err){
-        console.log(err);
+        // console.log(err);
         return res.status(500).json({
             message:"Internal Server Error"
         })

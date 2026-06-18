@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { SendIcon as Send } from 'lucide-react';
 import API from '../api/axios.js';
 import styles from './prompt.module.css'
-export default function Prompt() {
+export default function Prompt({addNewImage}) {
   const [prompt, setPrompt] = useState("");
   const [image, setImage] = useState("");
   const [generated, setGenerated] = useState(false);
@@ -19,7 +19,7 @@ export default function Prompt() {
 
       const currentCount = countRes.data.count;
 
-      if (currentCount >= 2) {
+      if (currentCount >= 200) {
 
         alert("Monthly image limit exceeded");
 
@@ -31,22 +31,26 @@ export default function Prompt() {
       const res = await API.post('api/images/promptToImage', {
         Prompt: prompt
       });
-      console.log(res.data);
-      setImage(res.data.generatedImage.url);
+    
+      addNewImage(res.data.generatedImage);
+      // console.log(res.data);
+      setImage(res.data.generatedImage.imageUrl);
       setGenerated(true);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
     finally{
       setLoading(false);
     }
   }
+  useEffect(()=>{
 
+  },[generated])
   function handleReset() {
     setPrompt("");
     setImage("");
     setGenerated(false);
-    setCollapsed(false);
+    setCollapsed(true);
   }
 
   return (

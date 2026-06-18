@@ -5,7 +5,7 @@ const generateAccessToken = (user) => {
     return jwt.sign({
       userId: user._id,
       email: user.email
-    }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+    }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
 };
 
 const generateRefreshToken = (user) => {

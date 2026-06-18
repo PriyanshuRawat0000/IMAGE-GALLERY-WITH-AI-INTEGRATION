@@ -16,7 +16,7 @@ const login = async (req, res) => {
             return res.status(400).json({ message: "INVALID CREDENTIALS" });
         }
 
-        console.log("USER FOUND:", findUser);
+        // console.log("USER FOUND:", findUser);
         const accessToken = generateAccessToken(findUser);
         const refreshToken = generateRefreshToken(findUser);
 
@@ -41,7 +41,7 @@ const login = async (req, res) => {
         res.status(200).json({
             message: "LOGIN SUCCESSFUL"
         })
-        console.log(`access:${accessToken} refresh:${refreshToken}`)
+        // console.log(`access:${accessToken} refresh:${refreshToken}`)
     }
     catch (e) {
         return res.status(500).json({ message: "INTERNAL SERVER ERROR" });
@@ -106,9 +106,9 @@ const signup = async (req, res) => {
 const fetchDetails = async (req,res)=>{
     const userId=req.userId;
     try{
-        console.log("yaha tak pahuch gaya");
+        // console.log("yaha tak pahuch gaya");
         const user=await User.findById(userId);
-        console.log("chal to raha hai");
+        // console.log("chal to raha hai");
         return res.status(200).json({
             email:user.email,
             username:user.username
@@ -116,7 +116,7 @@ const fetchDetails = async (req,res)=>{
         })
     }
     catch(err){
-        console.log(err);
+        // console.log(err);
         return res.status(500).json({
             message:"kuch ni hora tujhse"
         });

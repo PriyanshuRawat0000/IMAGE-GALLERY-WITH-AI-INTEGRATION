@@ -23,7 +23,7 @@ const Login = () => {
         password
       });
       
-      console.log("FULL RESPONSE:", res.data);
+      // console.log("FULL RESPONSE:", res.data);
       //alert(JSON.stringify(res.data));
 
       //alert( `hello ${res.data.message}`);

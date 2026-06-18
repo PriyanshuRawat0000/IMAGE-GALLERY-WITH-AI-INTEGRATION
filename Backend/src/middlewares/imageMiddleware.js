@@ -13,7 +13,7 @@ const imageMiddleware = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         req.userId = decoded.userId;
-        console.log("hydrogen");
+        // console.log("hydrogen");
         req.email=decoded.email;
         next();
     } catch (err) {

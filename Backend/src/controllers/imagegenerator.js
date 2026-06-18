@@ -44,7 +44,7 @@ const dailyImageGenerator = async () => {
       title: randomPrompt
     });
 
-    console.log(" Daily image generated");
+    // console.log(" Daily image generated");
 
   } catch (err) {
     console.error(" Daily image error:", err.message);
@@ -53,11 +53,11 @@ const dailyImageGenerator = async () => {
 
 const generateImage = async (req,res) => {
   
-  console.log("entered generateImage");
+  // console.log("entered generateImage");
   
   try {
     const prompt=req.body.Prompt;
-    console.log(prompt);
+    // console.log(prompt);
 
     const response = await groq.chat.completions.create({
     model: "llama-3.3-70b-versatile",
@@ -76,7 +76,7 @@ const generateImage = async (req,res) => {
   });
 
   const Title= response.choices[0].message.content.trim();
-    console.log(`${Title}`);
+    // console.log(`${Title}`);
     const image = await hf.textToImage({
       //"black-forest-labs/FLUX.1-dev",
       //"stabilityai/stable-diffusion-xl-base-1.0"
@@ -92,7 +92,7 @@ const generateImage = async (req,res) => {
       { folder: "daily_ai_images" }
     );
 
-    await Image.create({
+    const savedImage=await Image.create({
       cloudinaryId: uploadRes.public_id,
       url: uploadRes.secure_url,
       title: Title
@@ -102,9 +102,19 @@ const generateImage = async (req,res) => {
       url: uploadRes.secure_url,
       title: Title
     };
-    console.log("image generated");
+    // console.log("image generated");
+    // console.log(savedImage);
     return res.status(200).json({
-      generatedImage:responseImage
+      generatedImage: {
+      id: savedImage._id,
+      imageUrl: savedImage.url,
+      title: savedImage.title || "AI Image",
+      type: savedImage.type === "paid" ? "Paid" : "Free",
+      price: savedImage.price || 0,
+      downloads: savedImage.downloadCount || 0,
+      category: "AI",
+      createdAt: savedImage.createdAt
+    }
     });
 
   } catch (err) {

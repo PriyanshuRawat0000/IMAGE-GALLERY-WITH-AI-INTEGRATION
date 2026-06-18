@@ -2,7 +2,10 @@ import React, { useState ,useEffect } from 'react';
 import { User, Mail, Download, Award } from 'lucide-react';
 import styles from './profile.module.css';
 import API from '../api/axios.js';
+import {useNavigate} from 'react-router-dom';
+import {User as UserIcon,Home as DashBoardIcon,Library as LibraryIcon,LogOut as LogOutIcon} from 'lucide-react';
 export default function Profile({ user, downloadCount }) {
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [username, setUsername] = useState(user?.username || 'User');
   const [email, setEmail] = useState(user?.email || 'user@example.com');
@@ -15,7 +18,7 @@ export default function Profile({ user, downloadCount }) {
 
     }
     catch(err){
-      console.log(`err is ${err}`);
+      // console.log(`err is ${err}`);
       
     }
     
@@ -33,7 +36,7 @@ export default function Profile({ user, downloadCount }) {
     });
     }
     catch(err){
-      console.log(err);
+      // console.log(err);
     }
     
      
@@ -41,11 +44,32 @@ export default function Profile({ user, downloadCount }) {
 
   return (
     <div className={styles.profile}>
+      <div className={styles.header}>
+        <div className={styles.logo}><span>PROFILE</span></div>
+
+      
+        <div className={styles.otherTabs}>
+          <LibraryIcon
+            className={styles.libraryicon}
+            onClick={() => navigate('/library')}
+          />
+          <DashBoardIcon
+            className={styles.dashboardicon}
+            onClick={() => navigate('/dashboard')}
+          />
+          <LogOutIcon
+            className={styles.logouticon}
+            onClick={() => handleLogout()}
+        />
+        </div>
+        
+        
+      </div>
       <div className={styles.container}>
-        <div className={styles.header}>
+        {/* <div className={styles.header}>
           <h1>Profile</h1>
           <p>Manage your account information</p>
-        </div>
+        </div> */}
 
         <div className={styles.card}>
           

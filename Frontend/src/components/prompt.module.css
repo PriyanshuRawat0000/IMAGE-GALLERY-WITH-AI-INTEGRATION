@@ -90,6 +90,15 @@
   line-height: 1.4;
 
   max-height: 100px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.promptInput::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 /* PLACEHOLDER */

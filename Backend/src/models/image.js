@@ -35,6 +35,10 @@ const imageSchema = new mongoose.Schema({
   downloadCount: {
     type: Number,
     default: 0
+  },
+  prompt:{
+    type:String,
+    default:""
   }
 
 }, {

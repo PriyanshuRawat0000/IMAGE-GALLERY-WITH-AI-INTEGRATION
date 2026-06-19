@@ -207,6 +207,63 @@
   font-size: 1rem;
 }
 
+.promptSection {
+  margin-top: 0.2rem;
+  padding: 0.95rem 1rem 1rem;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.promptHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.7rem;
+}
+
+.promptLabel {
+  color: #94a3b8;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.copyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.38rem 0.7rem;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 999px;
+  background: rgba(102, 126, 234, 0.12);
+  color: #dbeafe;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copyBtn:hover {
+  transform: translateY(-1px);
+  background: rgba(102, 126, 234, 0.2);
+  border-color: rgba(102, 126, 234, 0.45);
+}
+
+.copyBtn:active {
+  transform: translateY(0);
+}
+
+.promptText {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  word-break: break-word;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .card {
@@ -277,6 +334,14 @@
   .footer {
     padding-top: 0.8rem;
   }
+
+  .promptSection {
+    padding: 0.85rem 0.9rem 0.9rem;
+  }
+
+  .promptText {
+    font-size: 0.84rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -342,5 +407,24 @@
 
   .footer {
     padding-top: 0.7rem;
+  }
+
+  .promptSection {
+    padding: 0.8rem 0.85rem 0.85rem;
+    border-radius: 10px;
+  }
+
+  .promptHeader {
+    margin-bottom: 0.55rem;
+  }
+
+  .copyBtn {
+    padding: 0.32rem 0.62rem;
+    font-size: 0.7rem;
+  }
+
+  .promptText {
+    font-size: 0.8rem;
+    line-height: 1.5;
   }
 }

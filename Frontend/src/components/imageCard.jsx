@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
-import { Download, TrendingUp } from 'lucide-react';
+import { Check, Copy, Download, TrendingUp } from 'lucide-react';
 import styles from './imageCard.module.css';
 
 export default function ImageCard({ image, onDownload, isLibrary = false }) {
 
   const [downloaded, setDownloaded] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const promptText = image.prompt?.trim() || '';
+  const promptPreviewLimit = 120;
+  const promptPreview =
+    promptText.length > promptPreviewLimit
+      ? `${promptText.slice(0, promptPreviewLimit)}....`
+      : promptText;
 
   const handleDownload = () => {
 
@@ -31,6 +39,18 @@ export default function ImageCard({ image, onDownload, isLibrary = false }) {
 
     const days = Math.floor(hours / 24);
     return `${days}d ago`;
+  };
+
+  const handleCopyPrompt = async () => {
+    if (!promptText) return;
+
+    try {
+      await navigator.clipboard.writeText(promptText);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1500);
+    } catch (error) {
+      console.error('Failed to copy prompt:', error);
+    }
   };
 
   return (
@@ -82,6 +102,28 @@ export default function ImageCard({ image, onDownload, isLibrary = false }) {
             <span className={styles.price}>${image.price}</span>
           )}
         </div>
+
+        {promptText && (
+          <div className={styles.promptSection}>
+            <div className={styles.promptHeader}>
+              <span className={styles.promptLabel}>Prompt</span>
+
+              <button
+                type="button"
+                className={styles.copyBtn}
+                onClick={handleCopyPrompt}
+                aria-label="Copy prompt to clipboard"
+              >
+                {copied ? <Check size={14} /> : <Copy size={14} />}
+                <span>{copied ? 'Copied' : 'Copy'}</span>
+              </button>
+            </div>
+
+            <p className={styles.promptText} title={promptText}>
+              {promptPreview}
+            </p>
+          </div>
+        )}
 
       </div>
 

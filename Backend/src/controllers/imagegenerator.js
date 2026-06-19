@@ -95,7 +95,8 @@ const generateImage = async (req,res) => {
     const savedImage=await Image.create({
       cloudinaryId: uploadRes.public_id,
       url: uploadRes.secure_url,
-      title: Title
+      title: Title,
+      prompt:prompt
     });
     const responseImage={
       cloudinaryId: uploadRes.public_id,
@@ -113,7 +114,8 @@ const generateImage = async (req,res) => {
       price: savedImage.price || 0,
       downloads: savedImage.downloadCount || 0,
       category: "AI",
-      createdAt: savedImage.createdAt
+      createdAt: savedImage.createdAt,
+      prompt:savedImage.prompt
     }
     });
 

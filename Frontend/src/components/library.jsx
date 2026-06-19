@@ -73,7 +73,8 @@ const fetchImages = async () => {
         price: img.price,
         downloads: img.downloadCount,
         category: "AI",
-        createdAt: img.createdAt
+        createdAt: img.createdAt,
+        prompt:img.prompt
       };
 
       // if (diff <= 24) recent.push(formatted);

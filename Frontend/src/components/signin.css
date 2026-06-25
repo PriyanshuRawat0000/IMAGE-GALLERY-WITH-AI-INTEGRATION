@@ -106,6 +106,68 @@ body {
     transform: scale(0.96);
 }
 
+.signinForm button:disabled,
+.otp-secondary-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    transform: none;
+    box-shadow: none;
+}
+
+.otp-actions {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.otp-secondary-button,
+.otp-link-button {
+    border: none;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 12px 20px;
+}
+
+.otp-secondary-button {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.otp-secondary-button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.otp-link-button {
+    background: transparent;
+    color: #93c5fd;
+    padding: 0;
+    text-align: left;
+}
+
+.otp-link-button:hover {
+    color: #bfdbfe;
+}
+
+.otp-help,
+.otp-error {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.otp-help {
+    color: #cbd5f5;
+}
+
+.otp-error {
+    color: #fca5a5;
+}
+
 .signin-container h4 {
     margin-top: 2rem;
     color: #cbd5f5;
@@ -170,5 +232,9 @@ body {
 
     .signinForm button {
         width: 100%;
+    }
+
+    .otp-actions {
+        gap: 0.7rem;
     }
 }

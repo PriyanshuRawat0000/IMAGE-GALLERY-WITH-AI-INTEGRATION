@@ -1,4 +1,7 @@
 const User = require('../models/user.js');
+const pendingUser=require('../models/pendingUser.js');
+const sendEmail=require('../services/sendMail.js');
+const generateString=require('../utils/generateString.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { generateAccessToken, generateRefreshToken } = require('../config/token.js');
@@ -47,28 +50,101 @@ const login = async (req, res) => {
         return res.status(500).json({ message: "INTERNAL SERVER ERROR" });
     }
 }
-
-const signup = async (req, res) => {
+const sendCode = async (req, res) => {
     const { username, email, password } = req.body;
 
     try {
-        //alert(`email is :${email} username is ${username}`);
-        let findUser = await User.findOne({ $or: [{ email: email }, { username: username }] });
-        if (findUser) {
+        
+        const existingUser = await User.findOne({
+            $or: [{ email }, { username }]
+        });
+
+        if (existingUser) {
             return res.status(400).json({
                 message: "User Already Exists"
             });
         }
-        else {
+
+        const pending = await pendingUser.findOne({ email });
+
+        const code = generateString();
+
+        //const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedCode = await bcrypt.hash(code, 10);
+
+        if (pending) {
+
+            if (pending.resendCount >= 5) {
+                return res.status(400).json({
+                    message: "Resend limit reached"
+                });
+            }
+
+            // Update if pneding user present
+            pending.username = username;
+            pending.password = hashedPassword;
+            pending.verificationString = hashedCode;
+            pending.resendCount += 1;
+            pending.attempts = 0;
+            pending.verificationStringUpdatedAt = Date.now();
+
+            await pending.save();
+
+            await sendEmail(email, code);
+
+            return res.status(200).json({
+                message: "Verification code sent again"
+            });
+        }
+
+        // if no pending user
+        const newUser = new pendingUser({
+            username,
+            email,
+            password: hashedPassword,
+            verificationString: hashedCode
+        });
+
+        await newUser.save();
+
+        await sendEmail(email, code);
+
+        return res.status(200).json({
+            message: "Email sent successfully"
+        });
+
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: "Email sending failed"
+        });
+    }
+};
+const signup = async (req, res) => {
+    const { username, email, password , code} = req.body;
+
+    try {
+        //alert(`email is :${email} username is ${username}`);
+        let findUser = await pendingUser.findOne({ email: email });
+        if (findUser) {
+          
+            const codeCorrect= await bcrypt.compare(code, findUser.verificationString);
+
+            if(!codeCorrect){
+                return res.status(402).json({
+                    message:"invalid code"
+                })
+            }
             //alert("user was found");
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, salt);
+            
 
             const newUser = new User({
-                username,
-                email,
-                password: hashedPassword
+                username:findUser.username,
+                email:findUser.email,
+                password:findUser.password,
             })
+            await pendingUser.deleteOne({email});
 
             await newUser.save();
             //alert("error still not here");
@@ -95,6 +171,9 @@ const signup = async (req, res) => {
             res.status(201).json({
                 message: "User Registered Successfully"
             })
+        }
+        else{
+            res.status(401).json({message:"email not found"});
         }
     }
     catch (err) {
@@ -242,4 +321,4 @@ const verify = async (req, res) => {
 
 }
 
-module.exports = { login, signup, update, refresh, logout, verify, fetchDetails };
+module.exports = { login, signup, sendCode, update, refresh, logout, verify, fetchDetails };

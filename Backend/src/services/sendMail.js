@@ -19,7 +19,7 @@ const sendEmail=async (email,code)=>{
     try{
         const verificationString=code;
         await transporter.sendMail({
-            from:`"AI Gallery" <${email}>`,
+            from:`"AI Gallery" <${process.env.SUPPORT_EMAIL_ID}>`,
             to:email,
             subject:"Verification mail for AI image Gallery",
             html: `
@@ -41,7 +41,7 @@ const sendEmail=async (email,code)=>{
    
 
 }
-sendEmail("priyanshurawat3.1415@gmail.com");
+
 
 
 module.exports=sendEmail

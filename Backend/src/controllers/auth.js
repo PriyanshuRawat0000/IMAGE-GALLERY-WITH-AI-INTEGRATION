@@ -67,7 +67,7 @@ const sendCode = async (req, res) => {
 
         const pending = await pendingUser.findOne({ email });
 
-        const code = generateString();
+        const code = await generateString();
 
         //const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, 10);

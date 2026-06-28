@@ -63,7 +63,7 @@ const SignUp = () => {
       // setOtpAttemptsLeft(5)
       // setCooldown(60)
     } catch (err) {
-      console.log(err)
+      //console.log(err)
       //alert(err?.response?.data?.message || 'Unable to send verification string')
       alert(err?.response?.data?.message);
     } finally {

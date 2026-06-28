@@ -126,7 +126,7 @@ const sendCode = async (req, res) => {
         });
 
     } catch (err) {
-        console.log(err);
+        //console.log(err);
         return res.status(500).json({
             message: "Email sending failed"
         });
@@ -149,7 +149,7 @@ const googleLogin=async (req,res)=>{
         // Decode the JWT credential without verification
         // (it's already verified by Google's servers)
         const decodedCredential = jwt.decode(credential);
-        console.log(`Decoded credential:`, decodedCredential);
+        
         
         const {email, name, picture}=decodedCredential;
         let firstUser=await User.findOne({email});

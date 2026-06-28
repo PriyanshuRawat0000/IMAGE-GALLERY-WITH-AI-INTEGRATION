@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import './signin.css'
-import API from '../api/axios.js'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import './signin.css';
+import API from '../api/axios.js';
+import { Link, useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
+import {responseGoogle} from './googleLogin.jsx';
 
 const SignUp = () => {
   const [username, setUsername] = useState('')
@@ -40,55 +42,66 @@ const SignUp = () => {
     e.preventDefault()
 
     try {
-      setIsSendingOtp(true)
-      await API.post('/api/auth/sendCode', {
-        email,
+      const res = await API.post('/api/auth/signup', {
         username,
-        password
+        email,
+        password,
+
       })
 
-      setShowOtpStep(true)
-      setVerificationString('')
-      setOtpAttemptsLeft(5)
-      setCooldown(60)
+      alert(res.data.message)
+      navigate('/dashboard', { replace: true })
+      // setIsSendingOtp(true)
+      // await API.post('/api/auth/sendCode', {
+      //   email,
+      //   username,
+      //   password
+      // })
+
+      // setShowOtpStep(true)
+      // setVerificationString('')
+      // setOtpAttemptsLeft(5)
+      // setCooldown(60)
     } catch (err) {
       console.log(err)
-      alert(err?.response?.data?.message || 'Unable to send verification string')
+      //alert(err?.response?.data?.message || 'Unable to send verification string')
+      alert(err?.response?.data?.message);
     } finally {
-      setIsSendingOtp(false)
+      //setIsSendingOtp(false)
     }
   }
+
 
   const handleOtpSubmit = async (e) => {
     e.preventDefault()
 
     if (otpAttemptsLeft <= 0) {
-      alert('You have used all attempts. Please resend the verification string or change your email.')
+      // alert('You have used all attempts. Please resend the verification string or change your email.')
       return
     }
 
     try {
-      setIsVerifyingOtp(true)
+      //setIsVerifyingOtp(true)
 
       // await API.post('/api/auth/verifyOtp', {
       //   email,
       //   otp: verificationString,
       // })
 
-      const res = await API.post('/api/auth/signup', {
-        username,
-        email,
-        password,
-        code:verificationString
-      })
+      // const res = await API.post('/api/auth/signup', {
+      //   username,
+      //   email,
+      //   password,
+      //   code:verificationString
+      // })
 
-      alert(res.data.message)
-      navigate('/dashboard', { replace: true })
+      // alert(res.data.message)
+      // navigate('/dashboard', { replace: true })
     } catch (err) {
-      alert(err?.response?.data?.message || 'Invalid verification string')
-      setOtpAttemptsLeft((current) => Math.max(current - 1, 0))
+      // alert(err?.response?.data?.message || 'Invalid verification string')
+      // setOtpAttemptsLeft((current) => Math.max(current - 1, 0))
     } finally {
-      setIsVerifyingOtp(false)
+      //setIsVerifyingOtp(false)
     }
   }
 
@@ -167,6 +180,15 @@ const SignUp = () => {
                 {isSendingOtp ? 'Sending verification string...' : 'Send Verification String'}
               </button>
             </form>
+            <div className="googleLogin">
+              <GoogleLogin
+                onSuccess={(authResult)=>responseGoogle(authResult,navigate)}
+                onError={() => {
+                  console.log("Login Failed");
+                }}
+              />
+            </div>
+
           </>
         ) : (
           <>

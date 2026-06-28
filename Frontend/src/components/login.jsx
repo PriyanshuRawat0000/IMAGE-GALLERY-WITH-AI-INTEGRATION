@@ -5,6 +5,8 @@ import {Link} from 'react-router-dom';
 import API from '../api/axios.js';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
+import {responseGoogle} from './googleLogin.jsx';
 
 
 const Login = () => {
@@ -56,6 +58,14 @@ const Login = () => {
         <br />
         <button type='submit' >Login</button>
       </form>
+      <div className="googleLogin">
+        <GoogleLogin
+          onSuccess={(authResult)=>responseGoogle(authResult,navigate)}
+          onError={() => {
+            console.log("Login Failed");
+          }}
+        />
+      </div>
       <h4>Dont have an account? <Link to="/signup">Sign Up</Link></h4>
       </div>
     </div>

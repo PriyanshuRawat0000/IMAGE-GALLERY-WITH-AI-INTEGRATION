@@ -5,7 +5,8 @@ const generateString=require('../utils/generateString.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { generateAccessToken, generateRefreshToken } = require('../config/token.js');
-
+const {oauth2client}=require('../utils/googleConfig.js');
+const axios=require('axios');
 const login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -91,7 +92,12 @@ const sendCode = async (req, res) => {
 
             await pending.save();
 
-            await sendEmail(email, code);
+            const emailSent = await sendEmail(email, code);
+            if (!emailSent) {
+                return res.status(500).json({
+                    message: "Email sending failed"
+                });
+            }
 
             return res.status(200).json({
                 message: "Verification code sent again"
@@ -108,7 +114,12 @@ const sendCode = async (req, res) => {
 
         await newUser.save();
 
-        await sendEmail(email, code);
+        const emailSent = await sendEmail(email, code);
+        if (!emailSent) {
+            return res.status(500).json({
+                message: "Email sending failed"
+            });
+        }
 
         return res.status(200).json({
             message: "Email sent successfully"
@@ -121,30 +132,152 @@ const sendCode = async (req, res) => {
         });
     }
 };
+
+const googleLogin=async (req,res)=>{
+    try{
+        // const {code}=req.body;
+        // const googleRes=await oauth2client.getToken(code);
+        // oauth2client.setCredentials(googleRes.tokens);
+        // console.log(`token is : ${googleRes}`);
+        // const userRes = await axios.get(
+        //     `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${googleRes.tokens.access_token}`
+        // );
+        // console.log(userRes);
+        // const {email,name,picture}=userRes.data;
+         const {credential}=req.body;
+        
+        // Decode the JWT credential without verification
+        // (it's already verified by Google's servers)
+        const decodedCredential = jwt.decode(credential);
+        console.log(`Decoded credential:`, decodedCredential);
+        
+        const {email, name, picture}=decodedCredential;
+        let firstUser=await User.findOne({email});
+        let isNewUser=false;
+        if(!firstUser){
+            firstUser= new User({
+                username:name,
+                email,
+                
+            })
+            
+
+            await firstUser.save();
+            //alert("error still not here");
+            isNewUser=true;
+            
+           
+        }
+        
+        //alert("error still not here");
+        const accessToken = generateAccessToken(firstUser);
+        const refreshToken = generateRefreshToken(firstUser);
+
+        firstUser.refreshToken = refreshToken;
+        await firstUser.save();
+
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'None',
+            maxAge: 15 * 60 * 1000 // 15 minutes
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'None',
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        });
+
+        res.status(isNewUser?201:200).json({
+            message: isNewUser?"User Registered Successfully":"User Authenticated",
+        })
+    
+
+    }
+    catch(err){
+        res.status(500).json({
+            message:"Internal Server Error"
+        })
+        // console.log(err);
+    }
+
+}
+// const signup = async (req, res) => {
+//     const { username, email, password , code} = req.body;
+
+//     try {
+//         //alert(`email is :${email} username is ${username}`);
+//         let findUser = await pendingUser.findOne({ email: email });
+//         if (findUser) {
+          
+//             const codeCorrect= await bcrypt.compare(code, findUser.verificationString);
+
+//             if(!codeCorrect){
+//                 return res.status(402).json({
+//                     message:"invalid code"
+//                 })
+//             }
+//             //alert("user was found");
+            
+
+//             const newUser = new User({
+//                 username:findUser.username,
+//                 email:findUser.email,
+//                 password:findUser.password,
+//             })
+//             await pendingUser.deleteOne({email});
+
+//             await newUser.save();
+//             //alert("error still not here");
+//             const accessToken = generateAccessToken(newUser);
+//             const refreshToken = generateRefreshToken(newUser);
+
+//             newUser.refreshToken = refreshToken;
+//             await newUser.save();
+
+//             res.cookie('accessToken', accessToken, {
+//                 httpOnly: true,
+//                 secure: process.env.NODE_ENV === 'production',
+//                 sameSite: 'None',
+//                 maxAge: 15 * 60 * 1000 // 15 minutes
+//             });
+
+//             res.cookie('refreshToken', refreshToken, {
+//                 httpOnly: true,
+//                 secure: process.env.NODE_ENV === 'production',
+//                 sameSite: 'None',
+//                 maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+//             });
+
+//             res.status(201).json({
+//                 message: "User Registered Successfully"
+//             })
+//         }
+//         else{
+//             res.status(401).json({message:"email not found"});
+//         }
+//     }
+//     catch (err) {
+//         console.error("ERROR DURING SIGNUP", err);
+//         res.status(500).json({ message: "INTERNAL SERVER ERROR" });
+//     }
+// }
 const signup = async (req, res) => {
-    const { username, email, password , code} = req.body;
+    const { username, email, password} = req.body;
 
     try {
         //alert(`email is :${email} username is ${username}`);
-        let findUser = await pendingUser.findOne({ email: email });
-        if (findUser) {
-          
-            const codeCorrect= await bcrypt.compare(code, findUser.verificationString);
-
-            if(!codeCorrect){
-                return res.status(402).json({
-                    message:"invalid code"
-                })
-            }
-            //alert("user was found");
+        let findUser = await User.findOne({ email: email });
+        if (!findUser) {
             
-
             const newUser = new User({
                 username:findUser.username,
                 email:findUser.email,
                 password:findUser.password,
             })
-            await pendingUser.deleteOne({email});
+            
 
             await newUser.save();
             //alert("error still not here");
@@ -173,7 +306,7 @@ const signup = async (req, res) => {
             })
         }
         else{
-            res.status(401).json({message:"email not found"});
+            res.status(401).json({message:"user already exists"});
         }
     }
     catch (err) {
@@ -181,7 +314,6 @@ const signup = async (req, res) => {
         res.status(500).json({ message: "INTERNAL SERVER ERROR" });
     }
 }
-
 const fetchDetails = async (req, res) => {
     const userId = req.userId;
     try {
@@ -321,4 +453,4 @@ const verify = async (req, res) => {
 
 }
 
-module.exports = { login, signup, sendCode, update, refresh, logout, verify, fetchDetails };
+module.exports = { login, signup, sendCode, update, refresh, logout, verify, fetchDetails,googleLogin };

@@ -19,7 +19,7 @@ export default function Prompt({addNewImage}) {
 
       const currentCount = countRes.data.count;
 
-      if (currentCount >= 200) {
+      if (currentCount >= 2) {
 
         alert("Monthly image limit exceeded");
 

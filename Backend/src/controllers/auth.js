@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const { generateAccessToken, generateRefreshToken } = require('../config/token.js');
 const {oauth2client}=require('../utils/googleConfig.js');
 const axios=require('axios');
+
 const login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -133,77 +134,166 @@ const sendCode = async (req, res) => {
     }
 };
 
-const googleLogin=async (req,res)=>{
-    try{
-        // const {code}=req.body;
-        // const googleRes=await oauth2client.getToken(code);
-        // oauth2client.setCredentials(googleRes.tokens);
-        // console.log(`token is : ${googleRes}`);
-        // const userRes = await axios.get(
-        //     `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${googleRes.tokens.access_token}`
-        // );
-        // console.log(userRes);
-        // const {email,name,picture}=userRes.data;
-         const {credential}=req.body;
+// const googleLogin=async (req,res)=>{
+//     try{
+//         // const {code}=req.body;
+//         // const googleRes=await oauth2client.getToken(code);
+//         // oauth2client.setCredentials(googleRes.tokens);
+//         // console.log(`token is : ${googleRes}`);
+//         // const userRes = await axios.get(
+//         //     `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${googleRes.tokens.access_token}`
+//         // );
+//         // console.log(userRes);
+//         // const {email,name,picture}=userRes.data;
+//          const {credential}=req.body;
         
-        // Decode the JWT credential without verification
-        // (it's already verified by Google's servers)
-        const decodedCredential = jwt.decode(credential);
+//         // Decode the JWT credential without verification
+//         // (it's already verified by Google's servers)
+//         const decodedCredential = jwt.decode(credential);
         
         
-        const {email, name, picture}=decodedCredential;
-        let firstUser=await User.findOne({email});
-        let isNewUser=false;
-        if(!firstUser){
-            firstUser= new User({
-                username:name,
-                email,
+//         const {email, name, picture}=decodedCredential;
+//         let firstUser=await User.findOne({email});
+//         let isNewUser=false;
+//         if(!firstUser){
+//             firstUser= new User({
+//                 username:name,
+//                 email,
                 
-            })
+//             })
             
 
-            await firstUser.save();
-            //alert("error still not here");
-            isNewUser=true;
+//             await firstUser.save();
+//             //alert("error still not here");
+//             isNewUser=true;
             
            
+//         }
+        
+//         //alert("error still not here");
+//         const accessToken = generateAccessToken(firstUser);
+//         const refreshToken = generateRefreshToken(firstUser);
+
+//         firstUser.refreshToken = refreshToken;
+//         await firstUser.save();
+
+//         res.cookie('accessToken', accessToken, {
+//             httpOnly: true,
+//             secure: process.env.NODE_ENV === 'production',
+//             sameSite: 'None',
+//             maxAge: 15 * 60 * 1000 // 15 minutes
+//         });
+
+//         res.cookie('refreshToken', refreshToken, {
+//             httpOnly: true,
+//             secure: process.env.NODE_ENV === 'production',
+//             sameSite: 'None',
+//             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+//         });
+
+//         res.status(isNewUser?201:200).json({
+//             message: isNewUser?"User Registered Successfully":"User Authenticated",
+//         })
+    
+
+//     }
+//     catch(err){
+//         res.status(500).json({
+//             message:"Internal Server Error"
+//         })
+//         // console.log(err);
+//     }
+
+// }
+
+const googleLogin = async (req, res) => {
+    try {
+        const { credential } = req.body;
+
+        if (!credential) {
+            return res.status(400).json({
+                message: "Google credential is required",
+            });
         }
         
-        //alert("error still not here");
+        const ticket = await oauth2client.verifyIdToken({
+            idToken: credential,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        //console.log("ticket is completed");
+        const payload = ticket.getPayload();
+
+        const {
+            email,
+            name,
+            picture,
+            email_verified,
+        } = payload;
+       
+        if (!email_verified) {
+            return res.status(401).json({
+                message: "Google email is not verified",
+            });
+        }
+
+        let firstUser = await User.findOne({ email });
+
+        let isNewUser = false;
+
+        if (!firstUser) {
+            firstUser = new User({
+                username: name,
+                email,
+            });
+
+            await firstUser.save();
+            isNewUser = true;
+        }
+
         const accessToken = generateAccessToken(firstUser);
         const refreshToken = generateRefreshToken(firstUser);
 
         firstUser.refreshToken = refreshToken;
         await firstUser.save();
 
-        res.cookie('accessToken', accessToken, {
+        res.cookie("accessToken", accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'None',
-            maxAge: 15 * 60 * 1000 // 15 minutes
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "None",
+            maxAge: 15 * 60 * 1000,
         });
 
-        res.cookie('refreshToken', refreshToken, {
+        res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'None',
-            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "None",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
-        res.status(isNewUser?201:200).json({
-            message: isNewUser?"User Registered Successfully":"User Authenticated",
-        })
-    
+        return res.status(isNewUser ? 201 : 200).json({
+            success: true,
+            message: isNewUser
+                ? "User Registered Successfully"
+                : "User Authenticated",
+            user: {
+                username: firstUser.username,
+                email: firstUser.email,
+            },
+        });
 
-    }
-    catch(err){
-        res.status(500).json({
-            message:"Internal Server Error"
-        })
-        // console.log(err);
-    }
+    } catch (err) {
+        console.error(err);
 
-}
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+        });
+    }
+};
+
+module.exports = {
+    googleLogin,
+};
 // const signup = async (req, res) => {
 //     const { username, email, password , code} = req.body;
 
@@ -273,9 +363,9 @@ const signup = async (req, res) => {
         if (!findUser) {
             
             const newUser = new User({
-                username:findUser.username,
-                email:findUser.email,
-                password:findUser.password,
+                username,
+                email,
+                password,
             })
             
 

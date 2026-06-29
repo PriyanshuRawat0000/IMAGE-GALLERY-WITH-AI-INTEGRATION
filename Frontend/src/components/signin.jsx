@@ -177,7 +177,7 @@ const SignUp = () => {
               />
               <br />
               <button type="submit" disabled={isSendingOtp}>
-                {isSendingOtp ? 'Sending verification string...' : 'Send Verification String'}
+                {isSendingOtp ? 'Sending verification string...' : 'Send'}
               </button>
             </form>
             <div className="googleLogin">
